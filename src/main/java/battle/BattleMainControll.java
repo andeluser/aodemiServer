@@ -56,7 +56,7 @@ public class BattleMainControll {
 
 		this.outputFile = this.playerPath + "output.json";
 
-	} //てすと
+	}////
 
 	public void init(
 			HashMap<String, Object> map,

@@ -973,24 +973,27 @@ public class BattleFieldUtil {
 			carId = actionList.get(num).get(3).toString();
 		}
 
-//		//次の行動が決まった場合、対象がオートスキルを保持してるかをチェックし更新内容を決める
-//		if (!"".equals(carId)) {
-//			Card card = cardUtil.getCard(carId);
-//
-//			//オートスキルが存在した場合は更新内容を確認する
-//			if (card.getAutoSkillName() != null && !"".equals(card.getAutoSkillName())) {
-//
-//				AbilityFactory open = new AbilityFactory();
-//				CardAbility cardAbility = open.getCardAbility(carId);
-//
-//				HashMap<String, Object> result = cardAbility.auto(battleID, (String)ret.get("playerId"), (int)ret.get("fieldNumber"));
-//
-//				if (result != null) {
-//					ret.put("autoUpdateInfo", result.get("updateInfo"));
-//					ret.put("autoTargetList", result.get("target"));
-//				}
-//			}
-//		}
+		ret.put("autoUpdateInfo", new HashMap());
+		ret.put("autoTargetList", new ArrayList());
+
+		//次の行動が決まった場合、対象がオートスキルを保持してるかをチェックし更新内容を決める
+		if (!"".equals(carId)) {
+			Card card = cardUtil.getCard(carId);
+
+			//オートスキルが存在した場合は更新内容を確認する
+			if (card.getAutoSkillName() != null && !"".equals(card.getAutoSkillName())) {
+
+				AbilityFactory open = new AbilityFactory();
+				CardAbility cardAbility = open.getCardAbility(carId);
+
+				HashMap<String, Object> result = cardAbility.auto(battleID, (String)ret.get("playerId"), (int)ret.get("fieldNumber"));
+
+				if (result != null) {
+					ret.put("autoUpdateInfo", result.get("updateInfo"));
+					ret.put("autoTargetList", result.get("target"));
+				}
+			}
+		}
 
 		return ret;
 	}
