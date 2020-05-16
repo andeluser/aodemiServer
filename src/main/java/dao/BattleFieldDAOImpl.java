@@ -697,7 +697,7 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    	stmt = conn.createStatement();
 			String sql = "SELECT CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "'"
 					+ " AND CLOSE_NUMBER = "
-					+ "(SELECT MIN(CLOSE_NUMBER) AS CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND CLOSE_NUMBER > 0"
+					+ "(SELECT MAX(CLOSE_NUMBER) AS CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND CLOSE_NUMBER > 0"
 					+ " AND CARD_ID IS NOT NULL) "
 					+ " AND CARD_ID IS NOT NULL ";
 
@@ -720,7 +720,7 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		stmt2 = conn.createStatement();
 				String sql2 = "SELECT OPEN_CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "'"
 						+ " AND OPEN_CLOSE_NUMBER = "
-						+ "(SELECT MIN(OPEN_CLOSE_NUMBER) AS OPEN_CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND OPEN_CLOSE_NUMBER > 0"
+						+ "(SELECT MAX(OPEN_CLOSE_NUMBER) AS OPEN_CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND OPEN_CLOSE_NUMBER > 0"
 						+ " AND CARD_ID IS NOT NULL) "
 						+ " AND CARD_ID IS NOT NULL ";
 
