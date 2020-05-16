@@ -15,4 +15,5 @@ public interface BattleFieldDAO {
 	void checkOpenClose(String battleID) throws Exception;
 	BattleFieldDTO getNextCloseSkill(String battleID) throws Exception;
 	void setClose(String battleID, String playerId, int fieldNumber, BattleFieldDTO fieldDto) throws Exception;
+	int getCloseNumber(String battleID) throws Exception;
 }

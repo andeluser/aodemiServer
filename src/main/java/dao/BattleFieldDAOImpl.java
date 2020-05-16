@@ -687,13 +687,6 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 
     		conn = accesser.getConnection();
 
-    		//セット、オープン、リムーブフェーズの場合は順序を
-    		if ("set".equals(controllDto.getPhase()) || "open".equals(controllDto.getPhase()) || "remove".equals(controllDto.getPhase())) {
-
-    		} else {
-    			//
-    		}
-
 	    	stmt = conn.createStatement();
 			String sql = "SELECT CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "'"
 					+ " AND CLOSE_NUMBER = "
@@ -737,6 +730,79 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		//最大クローズ順＋１を設定する
 		    	fieldDto.setClose_number(closeNumber + 1);
 	    	}
+
+    	} finally {
+    		if (rs != null) {
+    			rs.close();
+    		}
+
+    		if (stmt != null) {
+    			stmt.close();
+    		}
+
+    		if (conn != null) {
+    			conn.close();
+    		}
+
+    	}
+	}
+
+	//クローズ番号を取得する
+	public int getCloseNumber(String battleID) throws Exception {
+
+		DBManeger accesser = new DBManeger();
+
+    	Connection conn = null;
+    	Statement stmt = null;
+    	ResultSet rs = null;
+    	Statement stmt2 = null;
+    	ResultSet rs2 = null;
+
+    	DaoFactory factory = new DaoFactory();
+    	BattleControllDAO controllDao = factory.createControllDAO();
+		BattleControllDTO controllDto = controllDao.getAllValue(battleID);
+
+    	try {
+
+    		conn = accesser.getConnection();
+
+	    	stmt = conn.createStatement();
+			String sql = "SELECT CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "'"
+					+ " AND CLOSE_NUMBER = "
+					+ "(SELECT MAX(CLOSE_NUMBER) AS CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND CLOSE_NUMBER > 0"
+					+ " AND CARD_ID IS NOT NULL) "
+					+ " AND CARD_ID IS NOT NULL ";
+
+	    	rs = stmt.executeQuery(sql);
+
+	    	int closeNumber = 0;
+	    	//最小のクローズ順を取得
+	    	if (rs.next()) {
+	    		closeNumber = rs.getInt("CLOSE_NUMBER");
+	    	}
+
+	    	if ("set".equals(controllDto.getPhase()) || "open".equals(controllDto.getPhase()) || "remove".equals(controllDto.getPhase())) {
+
+	    		closeNumber = 0;
+
+	    		//オープンクローズ順の最大を取得する
+	    		stmt2 = conn.createStatement();
+				String sql2 = "SELECT OPEN_CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "'"
+						+ " AND OPEN_CLOSE_NUMBER = "
+						+ "(SELECT MAX(OPEN_CLOSE_NUMBER) AS OPEN_CLOSE_NUMBER FROM BATTLE_FIELD WHERE BATTLE_ID = '" + battleID + "' AND OPEN_CLOSE_NUMBER > 0"
+						+ " AND CARD_ID IS NOT NULL) "
+						+ " AND CARD_ID IS NOT NULL ";
+
+		    	rs2 = stmt2.executeQuery(sql2);
+
+		    	//最小のクローズ順を取得
+		    	if (rs2.next()) {
+		    		closeNumber = rs2.getInt("OPEN_CLOSE_NUMBER");
+		    	}
+
+	    	}
+
+	    	return closeNumber;
 
     	} finally {
     		if (rs != null) {
