@@ -7,7 +7,7 @@ import dao.BattleBaseDAO;
 import dto.BattleBaseDTO;
 import factory.DaoFactory;
 
-//袖の下
+//色集めの精霊
 public class b81 implements CardAbility {
 
 	@Override
@@ -19,8 +19,6 @@ public class b81 implements CardAbility {
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		//相手の奥義ゲージを20増やす
-		
 		//自分のＳＰを１増やす
 		int sp = baseDto.getSp();
 		sp = sp + 1;

@@ -3,14 +3,14 @@ package card;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import dao.BattleControllDAO;
+import dao.BattleBaseDAO;
 import dao.BattleFieldDAO;
-import dto.BattleControllDTO;
+import dto.BattleBaseDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
-//金色瞳の猫
-public class b2 implements CardAbility {
+//復活
+public class b6 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> open(String battleID, String playerId) throws Exception {
@@ -18,17 +18,14 @@ public class b2 implements CardAbility {
 
 		DaoFactory factory = new DaoFactory();
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
-		BattleControllDAO controllDao = factory.createControllDAO();
-		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
 
-		String enemyPlayerId = "";
-		if (playerId.equals(controllDTO.getPlayer_id_1())) {
-			enemyPlayerId = controllDTO.getPlayer_id_2();
-		} else {
-			enemyPlayerId = controllDTO.getPlayer_id_1();
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
+
+		if (baseDto.getSpecial_stock() < 2) {
+			//ストック２以下なら終了
+			return new HashMap<String, Object>();
 		}
-
-		ArrayList<Object> retTargetList = new ArrayList<Object>();
 
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
 
@@ -37,51 +34,29 @@ public class b2 implements CardAbility {
 
 		for (int i = 0; i < fieldDtoList.size(); i++) {
 			BattleFieldDTO list = fieldDtoList.get(i);
-
-			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0) {
+			//死亡かつレベル４以下
+			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 1 && list.getCur_level() <= 5) {
 				targetList.add(fieldDtoList.get(i).getField_no());
 			}
 		}
 
-		if (targetList.size() != 0) {
-			HashMap<String, Object> myTarget = new HashMap<String, Object>();
-			myTarget.put("playerId", playerId);
-			myTarget.put("list", targetList);
-			retTargetList.add(myTarget);
-		}
-
-		//相手の対象計算
-		ArrayList<BattleFieldDTO> enemyFieldDtoList = fieldDao.getAllList(battleID, enemyPlayerId);
-
-		//対象を計算する
-		ArrayList<Object> enemyTargetList = new ArrayList<Object>();
-
-		for (int i = 0; i < enemyFieldDtoList.size(); i++) {
-			BattleFieldDTO list = enemyFieldDtoList.get(i);
-
-			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0) {
-				enemyTargetList.add(enemyFieldDtoList.get(i).getField_no());
-			}
-		}
-
-		if (enemyTargetList.size() != 0) {
-			HashMap<String, Object> enemyTarget = new HashMap<String, Object>();
-			enemyTarget.put("playerId", enemyPlayerId);
-			enemyTarget.put("list", enemyTargetList);
-			retTargetList.add(enemyTarget);
-		}
-
-		if (targetList.size() == 0 && enemyTargetList.size() == 0) {
+		if (targetList.size() == 0) {
 			//対象が一人も居ない場合は処理終了
 			return new HashMap<String, Object>();
 		}
+
+		HashMap<String, Object> myTarget = new HashMap<String, Object>();
+		myTarget.put("playerId", playerId);
+		myTarget.put("list", targetList);
+
+		ArrayList<Object> retTargetList = new ArrayList<Object>();
+		retTargetList.add(myTarget);
 
 		HashMap<String, Object> retMap = new HashMap<String, Object>();
 
 		retMap.put("selectCount", 1);
 		retMap.put("targetList", retTargetList);
 
-		//更新は墓地送還のみ
 		ArrayList retList = new ArrayList();
 		if (retMap.size() != 0) {
 			retList.add(retMap);
@@ -107,6 +82,7 @@ public class b2 implements CardAbility {
 		ArrayList<Object> updateList = new ArrayList<Object>();
 		ArrayList<Object> retList = new ArrayList<Object>();
 
+		//対象をアクション終了する
 		for (int i = 0; i < targetList.size(); i++) {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
@@ -120,15 +96,12 @@ public class b2 implements CardAbility {
 				for (int k= 0; k < list.size(); k++) {
 					BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
 
-					//対象のユニットのHPを３０増加
-					int hp = fieldDto.getCur_hp() + 30;
-					int maxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
+					//対象のユニットを復活させる
+					fieldDto.setClose(0);
+					fieldDto.setAction(0);
+					fieldDto.setClose_number(0);
+					fieldDto.setOpen_close_number(0);
 
-					if (hp >= maxHp) {
-						hp = maxHp;
-					}
-
-					fieldDto.setCur_hp(hp);
 					fieldDao.update(fieldDto);
 
 					//戻り値の作成
@@ -136,7 +109,7 @@ public class b2 implements CardAbility {
 
 					detailMap.put("playerId", player1);
 					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("hp", hp);
+					detailMap.put("remove", "revive");
 					retList.add(detailMap);
 				}
 			}
@@ -153,27 +126,14 @@ public class b2 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> start(String battleID, String playerId, int fieldNumber) throws Exception {
+
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
 	@Override
-	public HashMap<String, Object> startSelect(String battleID, String playerId, ArrayList<Object> targetList,
-			int fieldNumber) throws Exception {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
+	public HashMap<String, Object> startSelect(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber) throws Exception {
 
-	@Override
-	public HashMap<String, Object> auto(String battleID, String playerId, int fieldNumber) throws Exception {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	@Override
-	public HashMap<String, Object> autoSelect(String battleID, String playerId, ArrayList<Object> targetList,
-			int fieldNumber) throws Exception {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
@@ -184,8 +144,8 @@ public class b2 implements CardAbility {
 	}
 
 	@Override
-	public HashMap<String, Object> actionSelect1(String battleID, String playerId, ArrayList<Object> targetList,
-			int fieldNumber) throws Exception {
+	public HashMap<String, Object> actionSelect1(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber)
+			throws Exception {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -197,8 +157,8 @@ public class b2 implements CardAbility {
 	}
 
 	@Override
-	public HashMap<String, Object> actionSelect2(String battleID, String playerId, ArrayList<Object> targetList,
-			int fieldNumber) throws Exception {
+	public HashMap<String, Object> actionSelect2(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber)
+			throws Exception {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -210,8 +170,20 @@ public class b2 implements CardAbility {
 	}
 
 	@Override
-	public HashMap<String, Object> closeSelect(String battleID, String playerId, ArrayList<Object> targetList,
-			int fieldNumber) throws Exception {
+	public HashMap<String, Object> closeSelect(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber) throws Exception {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public HashMap<String, Object> auto(String battleID, String playerId, int fieldNumber) throws Exception {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public HashMap<String, Object> autoSelect(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber)
+			throws Exception {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}

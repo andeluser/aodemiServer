@@ -10,10 +10,9 @@ import dto.BattleBaseDTO;
 import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
-import util.StringUtil;
 
-//本家襲撃
-public class m19 implements CardAbility {
+//神罰
+public class b9 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> open(String battleID, String playerId) throws Exception {
@@ -22,15 +21,7 @@ public class m19 implements CardAbility {
 		DaoFactory factory = new DaoFactory();
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
-		BattleBaseDAO baseDao = factory.createBaseDAO();
-
 		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
-		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
-
-		//ストックが２以上の場合は発動しない
-		if (baseDto.getSpecial_stock() > 1) {
-			return new HashMap<String, Object>();
-		}
 
 		String enemyPlayerId = "";
 		if (playerId.equals(controllDTO.getPlayer_id_1())) {
@@ -114,14 +105,12 @@ public class m19 implements CardAbility {
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
-		StringUtil util = new StringUtil();
 
 		//戻り値設定
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
 		ArrayList<Object> updateList = new ArrayList<Object>();
 		ArrayList<Object> retList = new ArrayList<Object>();
 
-		//対象をアクション終了する
 		for (int i = 0; i < targetList.size(); i++) {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
@@ -135,41 +124,23 @@ public class m19 implements CardAbility {
 				for (int k= 0; k < list.size(); k++) {
 					BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
 
-					//対象のユニットを墓地へ送る
-					baseDto.setCemetery(util.addCardNumberForCamma(baseDto.getCemetery(), fieldDto.getDeck_no()));
-					baseDao.update(baseDto);
+					//対象のユニットに自分の奥義ストック×１０を与える
+					//ダメージ量を計算
+					int atack =baseDto.getSpecial_stock() * 10;
 
-					//盤面から削除する
-					fieldDto.setCard_id("");
-					fieldDto.setClose(0);
-					fieldDto.setClose_number(0);
-					fieldDto.setOpen_close_number(0);
-					fieldDto.setClose_skill(0);
-					fieldDto.setStart_action(0);
-					fieldDto.setAction(0);
-					fieldDto.setColor("");
-					fieldDto.setType1("");
-					fieldDto.setType2("");
-					fieldDto.setPermanent_hp(0);
-					fieldDto.setTurn_hp(0);
-					fieldDto.setBase_hp(0);
-					fieldDto.setCur_hp(0);
-					fieldDto.setPermanent_level(0);
-					fieldDto.setTurn_level(0);
-					fieldDto.setCur_level(0);
-					fieldDto.setPermanent_atk(0);
-					fieldDto.setTurn_atk(0);
-					fieldDto.setCur_atk(0);
-					fieldDto.setPermanent_def(0);
-					fieldDto.setTurn_def(0);
-					fieldDto.setCur_def(0);
-					fieldDto.setPermanent_speed(0);
-					fieldDto.setTurn_speed(0);
-					fieldDto.setCur_speed(0);
-					fieldDto.setPermanent_range(0);
-					fieldDto.setTurn_range(0);
-					fieldDto.setCur_range(0);
-					fieldDto.setDeck_no(0);
+					//HPに防御を考慮
+					int enemyHp = fieldDto.getCur_hp() + fieldDto.getPermanent_def() + fieldDto.getTurn_def() + fieldDto.getCur_def();
+
+					//HPを計算
+					enemyHp = enemyHp - atack;
+
+					//相手のHPを設定
+					fieldDto.setCur_hp(enemyHp);
+
+					//相手のHPがゼロ以下となった場合はクローズ判定を立てる
+					if (enemyHp <= 0) {
+						fieldDao.setClose(battleID, fieldDto.getPlayer_id(), fieldDto.getField_no(), fieldDto);
+					}
 
 					fieldDao.update(fieldDto);
 
@@ -178,7 +149,7 @@ public class m19 implements CardAbility {
 
 					detailMap.put("playerId", player1);
 					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("remove", "cemetery");
+					detailMap.put("hp", enemyHp);
 					retList.add(detailMap);
 				}
 			}
@@ -195,28 +166,26 @@ public class m19 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> start(String battleID, String playerId, int fieldNumber) throws Exception {
-
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
 	@Override
 	public HashMap<String, Object> startSelect(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber) throws Exception {
-
+		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
-	@Override
+	//鷹の目
 	public HashMap<String, Object> action1(String battleID, String playerId, int fieldNumber) throws Exception {
 		// TODO 自動生成されたメソッド・スタブ
-		return null;
+				return null;
 	}
 
 	@Override
-	public HashMap<String, Object> actionSelect1(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber)
-			throws Exception {
+	public HashMap<String, Object> actionSelect1(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber) {
 		// TODO 自動生成されたメソッド・スタブ
-		return null;
+			return null;
 	}
 
 	@Override
@@ -232,16 +201,116 @@ public class m19 implements CardAbility {
 		return null;
 	}
 
+	//タダでは帰らない
 	@Override
 	public HashMap<String, Object> close(String battleID, String playerId, int fieldNumber) throws Exception {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+
+		HashMap<String, Object> ret = new HashMap<String, Object>();
+
+		DaoFactory factory = new DaoFactory();
+		BattleFieldDAO fieldDao = factory.createFieldDAO();
+		BattleControllDAO controllDao = factory.createControllDAO();
+
+		BattleControllDTO controllDto = controllDao.getAllValue(battleID);
+
+		//相手の情報を決定
+		String enemyPlayerId = "";
+		if (playerId.equals(controllDto.getPlayer_id_1())) {
+			enemyPlayerId = controllDto.getPlayer_id_2();
+		} else {
+			enemyPlayerId = controllDto.getPlayer_id_1();
+		}
+
+		ArrayList<Object> targetList = new ArrayList<Object>();
+		ArrayList<BattleFieldDTO> dtoList = fieldDao.getAllList(battleID, enemyPlayerId);
+
+		//対象の一覧を取得
+		for (int i = 0; i < dtoList.size(); i++) {
+
+			BattleFieldDTO dto = dtoList.get(i);
+
+			if (!"".equals(dto.getCard_id()) && dto.getClose() == 0 ) {
+				targetList.add(i);
+			}
+		}
+
+		if (targetList.size() == 0) {
+			return new HashMap();
+		}
+
+		//戻り値設定
+		HashMap<String, Object> targetMap = new HashMap<String, Object>();
+		targetMap.put("list", targetList);
+		targetMap.put("playerId", enemyPlayerId);
+
+		ArrayList<Object> retTargetList = new ArrayList<Object>();
+		retTargetList.add(targetMap);
+
+		HashMap<String, Object> retMap = new HashMap<String, Object>();
+		retMap.put("selectCount", 1);
+		retMap.put("targetList", retTargetList);
+
+		ArrayList retList = new ArrayList();
+		if (retMap.size() != 0) {
+			retList.add(retMap);
+		}
+
+		ret.put("updateInfo", new HashMap());
+		ret.put("target", retList);
+
+		return ret;
 	}
 
 	@Override
 	public HashMap<String, Object> closeSelect(String battleID, String playerId, ArrayList<Object> targetList, int fieldNumber) throws Exception {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		HashMap<String, Object> ret = new HashMap<String, Object>();
+
+		//戻り値設定
+		HashMap<String, Object> updateMap = new HashMap<String, Object>();
+		ArrayList<Object> updateList = new ArrayList<Object>();
+		ArrayList<Object> retList = new ArrayList<Object>();
+
+		DaoFactory factory = new DaoFactory();
+		BattleFieldDAO fieldDao = factory.createFieldDAO();
+
+		for (int i = 0; i < targetList.size(); i++) {
+			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
+			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
+
+			for (int j = 0; i < koList.size(); i++) {
+				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
+
+				String player1 = koMap.get("playerId").toString();
+				ArrayList<Integer> list = (ArrayList)koMap.get("list");
+
+				for (int k= 0; k < list.size(); k++) {
+					BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
+
+					//対象のatkを10下げる
+					int atk = enemyFieldDto.getPermanent_atk() - 10;
+
+					enemyFieldDto.setPermanent_atk(atk);
+					fieldDao.update(enemyFieldDto);
+
+					//戻り値の作成
+					HashMap<String, Object> detailMap = new HashMap<String, Object>();
+
+					detailMap.put("playerId", player1);
+					detailMap.put("fieldNumber", list.get(k));
+					detailMap.put("upATK", atk);
+					retList.add(detailMap);
+				}
+			}
+		}
+
+		//戻り値設定
+		updateMap.put("field", retList);
+		updateList.add(updateMap);
+
+		ret.put("updateInfo", updateList);
+		ret.put("target", new ArrayList<Object>());
+
+		return ret;
 	}
 
 	@Override

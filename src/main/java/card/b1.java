@@ -29,6 +29,8 @@ public class b1 implements CardAbility {
 			enemyPlayerId = controllDTO.getPlayer_id_1();
 		}
 
+		ArrayList<Object> retTargetList = new ArrayList<Object>();
+
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
 
 		//対象を計算する
@@ -42,9 +44,12 @@ public class b1 implements CardAbility {
 			}
 		}
 
-		HashMap<String, Object> myTarget = new HashMap<String, Object>();
-		myTarget.put("playerId", playerId);
-		myTarget.put("list", targetList);
+		if (targetList.size() != 0) {
+			HashMap<String, Object> myTarget = new HashMap<String, Object>();
+			myTarget.put("playerId", playerId);
+			myTarget.put("list", targetList);
+			retTargetList.add(myTarget);
+		}
 
 		//相手の対象計算
 		ArrayList<BattleFieldDTO> enemyFieldDtoList = fieldDao.getAllList(battleID, enemyPlayerId);
@@ -60,18 +65,17 @@ public class b1 implements CardAbility {
 			}
 		}
 
+		if (enemyTargetList.size() != 0) {
+			HashMap<String, Object> enemyTarget = new HashMap<String, Object>();
+			enemyTarget.put("playerId", enemyPlayerId);
+			enemyTarget.put("list", enemyTargetList);
+			retTargetList.add(enemyTarget);
+		}
+
 		if (targetList.size() == 0 && enemyTargetList.size() == 0) {
 			//対象が一人も居ない場合は処理終了
 			return new HashMap<String, Object>();
 		}
-
-		HashMap<String, Object> enemyTarget = new HashMap<String, Object>();
-		enemyTarget.put("playerId", enemyPlayerId);
-		enemyTarget.put("list", enemyTargetList);
-
-		ArrayList<Object> retTargetList = new ArrayList<Object>();
-		retTargetList.add(myTarget);
-		retTargetList.add(enemyTarget);
 
 		HashMap<String, Object> retMap = new HashMap<String, Object>();
 

@@ -3,14 +3,12 @@ package card;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import dao.BattleControllDAO;
 import dao.BattleFieldDAO;
-import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
-//金色瞳の猫
-public class b2 implements CardAbility {
+//慈愛の乙女
+public class b8 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> open(String battleID, String playerId) throws Exception {
@@ -18,18 +16,6 @@ public class b2 implements CardAbility {
 
 		DaoFactory factory = new DaoFactory();
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
-		BattleControllDAO controllDao = factory.createControllDAO();
-		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
-
-		String enemyPlayerId = "";
-		if (playerId.equals(controllDTO.getPlayer_id_1())) {
-			enemyPlayerId = controllDTO.getPlayer_id_2();
-		} else {
-			enemyPlayerId = controllDTO.getPlayer_id_1();
-		}
-
-		ArrayList<Object> retTargetList = new ArrayList<Object>();
-
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
 
 		//対象を計算する
@@ -43,103 +29,31 @@ public class b2 implements CardAbility {
 			}
 		}
 
-		if (targetList.size() != 0) {
-			HashMap<String, Object> myTarget = new HashMap<String, Object>();
-			myTarget.put("playerId", playerId);
-			myTarget.put("list", targetList);
-			retTargetList.add(myTarget);
-		}
-
-		//相手の対象計算
-		ArrayList<BattleFieldDTO> enemyFieldDtoList = fieldDao.getAllList(battleID, enemyPlayerId);
-
-		//対象を計算する
-		ArrayList<Object> enemyTargetList = new ArrayList<Object>();
-
-		for (int i = 0; i < enemyFieldDtoList.size(); i++) {
-			BattleFieldDTO list = enemyFieldDtoList.get(i);
-
-			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0) {
-				enemyTargetList.add(enemyFieldDtoList.get(i).getField_no());
-			}
-		}
-
-		if (enemyTargetList.size() != 0) {
-			HashMap<String, Object> enemyTarget = new HashMap<String, Object>();
-			enemyTarget.put("playerId", enemyPlayerId);
-			enemyTarget.put("list", enemyTargetList);
-			retTargetList.add(enemyTarget);
-		}
-
-		if (targetList.size() == 0 && enemyTargetList.size() == 0) {
+		if (targetList.size() == 0) {
 			//対象が一人も居ない場合は処理終了
 			return new HashMap<String, Object>();
 		}
 
-		HashMap<String, Object> retMap = new HashMap<String, Object>();
-
-		retMap.put("selectCount", 1);
-		retMap.put("targetList", retTargetList);
-
-		//更新は墓地送還のみ
-		ArrayList retList = new ArrayList();
-		if (retMap.size() != 0) {
-			retList.add(retMap);
-		}
-
-		//戻り値設定
-		ret.put("updateInfo", new HashMap<String, Object>());
-		ret.put("target", retList);
-
-		return ret;
-	}
-
-	@Override
-	public HashMap<String, Object> openSelect(String battleID, String playerId, ArrayList<Object> targetList)
-			throws Exception {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-
-		DaoFactory factory = new DaoFactory();
-		BattleFieldDAO fieldDao = factory.createFieldDAO();
-
-		//戻り値設定
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
 		ArrayList<Object> updateList = new ArrayList<Object>();
 		ArrayList<Object> retList = new ArrayList<Object>();
 
-		for (int i = 0; i < targetList.size(); i++) {
-			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
-			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
+		for (int k= 0; k < targetList.size(); k++) {
+			BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, playerId, (int)targetList.get(k));
 
-			for (int j = 0; i < koList.size(); i++) {
-				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
+			//対象のユニットのHP全快する
+			int hp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
 
-				String player1 = koMap.get("playerId").toString();
-				ArrayList<Integer> list = (ArrayList)koMap.get("list");
+			fieldDto.setCur_hp(hp);
+			fieldDao.update(fieldDto);
 
-				for (int k= 0; k < list.size(); k++) {
-					BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
+			//戻り値の作成
+			HashMap<String, Object> detailMap = new HashMap<String, Object>();
 
-					//対象のユニットのHPを３０増加
-					int hp = fieldDto.getCur_hp() + 30;
-					int maxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
-
-					if (hp >= maxHp) {
-						hp = maxHp;
-					}
-
-					fieldDto.setCur_hp(hp);
-					fieldDao.update(fieldDto);
-
-					//戻り値の作成
-					HashMap<String, Object> detailMap = new HashMap<String, Object>();
-
-					detailMap.put("playerId", player1);
-					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("hp", hp);
-					retList.add(detailMap);
-				}
-			}
+			detailMap.put("playerId", playerId);
+			detailMap.put("fieldNumber", targetList.get(k));
+			detailMap.put("hp", hp);
+			retList.add(detailMap);
 		}
 
 		updateMap.put("field", retList);
@@ -149,6 +63,13 @@ public class b2 implements CardAbility {
 		ret.put("target", new ArrayList<Object>());
 
 		return ret;
+	}
+
+	@Override
+	public HashMap<String, Object> openSelect(String battleID, String playerId, ArrayList<Object> targetList)
+			throws Exception {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 	@Override
