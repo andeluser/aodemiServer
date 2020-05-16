@@ -127,12 +127,14 @@ public class b9 implements CardAbility {
 					//対象のユニットに自分の奥義ストック×１０を与える
 					//ダメージ量を計算
 					int atack =baseDto.getSpecial_stock() * 10;
+					atack = atack - fieldDto.getPermanent_def() + fieldDto.getTurn_def() + fieldDto.getCur_def();
 
-					//HPに防御を考慮
-					int enemyHp = fieldDto.getCur_hp() + fieldDto.getPermanent_def() + fieldDto.getTurn_def() + fieldDto.getCur_def();
+					if (atack <= 0) {
+						atack = 0;
+					}
 
 					//HPを計算
-					enemyHp = enemyHp - atack;
+					int enemyHp = fieldDto.getCur_hp() - atack;
 
 					//相手のHPを設定
 					fieldDto.setCur_hp(enemyHp);

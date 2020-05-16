@@ -140,8 +140,17 @@ public class b13 implements CardAbility {
 					//自分のＨＰを減らす
 					BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, playerId, fieldNumber);
 
-					hp = fieldDto.getCur_hp() + fieldDto.getCur_def() + fieldDto.getPermanent_def() + fieldDto.getTurn_def()
-					- (enemyFieldDto.getPermanent_atk() + enemyFieldDto.getCur_atk() + enemyFieldDto.getTurn_atk());
+					hp = fieldDto.getCur_hp();
+
+					int attack = enemyFieldDto.getPermanent_atk() + enemyFieldDto.getCur_atk() + enemyFieldDto.getTurn_atk();
+
+					attack = attack - (fieldDto.getCur_def() + fieldDto.getPermanent_def() + fieldDto.getTurn_def());
+
+					if (attack <= 0) {
+						attack = 0;
+					}
+
+					hp = hp - attack;
 
 					fieldDto.setCur_hp(hp);
 
