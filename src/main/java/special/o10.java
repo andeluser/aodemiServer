@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.BattleBaseDAO;
-import dao.BattleFieldDAO;
 import dto.BattleBaseDTO;
-import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
-//明日への祈り
-public class o1 implements SpecialAbility {
+//未知への冒険
+public class o10 implements SpecialAbility {
 
 	@Override
 	public HashMap<String, Object> specialSkill(String battleID, String playerId) throws Exception {
@@ -18,45 +16,29 @@ public class o1 implements SpecialAbility {
 		HashMap<String, Object> ret = new HashMap<String, Object>();
 
 		DaoFactory factory = new DaoFactory();
-		BattleFieldDAO fieldDao = factory.createFieldDAO();
-		ArrayList<BattleFieldDTO> fieldList = fieldDao.getAllList(battleID, playerId);
 
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		//ストックを３消費
-		baseDto.setSpecial_stock(baseDto.getSpecial_stock() - 2);
-		baseDao.update(baseDto);
-
 		ArrayList<Object> retList = new ArrayList<Object>();
 
-		//自分のユニットのDEFをターン中２０上げる
-		for (int i = 0; i < fieldList.size(); i++) {
+		//ストックを４消費
+		baseDto.setSpecial_stock(baseDto.getSpecial_stock() - 4);
+		//SPを３増やす
+		baseDto.setSp(baseDto.getSp() + 3);
+		baseDao.update(baseDto);
 
-			if (!"".equals(fieldList.get(i).getCard_id()) && fieldList.get(i).getClose() == 0) {
-				fieldList.get(i).setTurn_def(fieldList.get(i).getTurn_def() + 20);
-
-				//戻り値の作成
-				HashMap<String, Object> detailMap = new HashMap<String, Object>();
-
-				detailMap.put("playerId", playerId);
-				detailMap.put("fieldNumber", i);
-				detailMap.put("tupDFE", fieldList.get(i).getTurn_def());
-				retList.add(detailMap);
-			}
-		}
-
-		if (retList.size() == 0) {
-			return ret;
-		}
-
-		fieldDao.update(fieldList);
+		//戻り値の作成
+		HashMap<String, Object> detailMap = new HashMap<String, Object>();
+		detailMap.put("playerId", playerId);
+		detailMap.put("SP", baseDto.getSp());
+		retList.add(detailMap);
 
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
 		ArrayList<Object> updateList = new ArrayList<Object>();
 
 		//戻り値設定
-		updateMap.put("field", retList);
+		updateMap.put("sp", retList);
 		updateList.add(updateMap);
 
 		ret.put("updateInfo", updateList);

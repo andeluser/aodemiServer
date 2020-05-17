@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.BattleBaseDAO;
-import dao.BattleFieldDAO;
 import dto.BattleBaseDTO;
-import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
-//明日への祈り
-public class o1 implements SpecialAbility {
+//平和の歌
+public class o9 implements SpecialAbility {
 
 	@Override
 	public HashMap<String, Object> specialSkill(String battleID, String playerId) throws Exception {
@@ -18,45 +16,51 @@ public class o1 implements SpecialAbility {
 		HashMap<String, Object> ret = new HashMap<String, Object>();
 
 		DaoFactory factory = new DaoFactory();
-		BattleFieldDAO fieldDao = factory.createFieldDAO();
-		ArrayList<BattleFieldDTO> fieldList = fieldDao.getAllList(battleID, playerId);
 
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		//ストックを３消費
-		baseDto.setSpecial_stock(baseDto.getSpecial_stock() - 2);
-		baseDao.update(baseDto);
-
 		ArrayList<Object> retList = new ArrayList<Object>();
 
-		//自分のユニットのDEFをターン中２０上げる
-		for (int i = 0; i < fieldList.size(); i++) {
+		//ストックを２消費
+		baseDto.setSpecial_stock(baseDto.getSpecial_stock() - 2);
 
-			if (!"".equals(fieldList.get(i).getCard_id()) && fieldList.get(i).getClose() == 0) {
-				fieldList.get(i).setTurn_def(fieldList.get(i).getTurn_def() + 20);
+		HashMap<String, Object> detailMap = new HashMap<String, Object>();
 
-				//戻り値の作成
-				HashMap<String, Object> detailMap = new HashMap<String, Object>();
-
-				detailMap.put("playerId", playerId);
-				detailMap.put("fieldNumber", i);
-				detailMap.put("tupDFE", fieldList.get(i).getTurn_def());
-				retList.add(detailMap);
-			}
+		if (baseDto.getBlack() == 0) {
+			baseDto.setBlack(1);
+			detailMap.put("black", 1);
 		}
 
-		if (retList.size() == 0) {
+		if (baseDto.getRed() == 0) {
+			baseDto.setRed(1);
+			detailMap.put("red", 1);
+		}
+
+		if (baseDto.getYellow() == 0) {
+			baseDto.setYellow(1);
+			detailMap.put("yellow", 1);
+		}
+
+		if (baseDto.getBlue() == 0) {
+			baseDto.setBlue(1);
+			detailMap.put("blue", 1);
+		}
+
+		baseDao.update(baseDto);
+
+		if (detailMap.size() == 0) {
 			return ret;
 		}
 
-		fieldDao.update(fieldList);
+		detailMap.put("playerId", playerId);
+		retList.add(detailMap);
 
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
 		ArrayList<Object> updateList = new ArrayList<Object>();
 
 		//戻り値設定
-		updateMap.put("field", retList);
+		updateMap.put("mana", retList);
 		updateList.add(updateMap);
 
 		ret.put("updateInfo", updateList);

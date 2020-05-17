@@ -10,7 +10,7 @@ import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
 //明日への祈り
-public class o1 implements SpecialAbility {
+public class o2 implements SpecialAbility {
 
 	@Override
 	public HashMap<String, Object> specialSkill(String battleID, String playerId) throws Exception {
@@ -24,24 +24,25 @@ public class o1 implements SpecialAbility {
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		//ストックを３消費
+		//ストックを２消費
 		baseDto.setSpecial_stock(baseDto.getSpecial_stock() - 2);
 		baseDao.update(baseDto);
 
 		ArrayList<Object> retList = new ArrayList<Object>();
 
-		//自分のユニットのDEFをターン中２０上げる
 		for (int i = 0; i < fieldList.size(); i++) {
 
 			if (!"".equals(fieldList.get(i).getCard_id()) && fieldList.get(i).getClose() == 0) {
-				fieldList.get(i).setTurn_def(fieldList.get(i).getTurn_def() + 20);
+				int maxHp = fieldList.get(i).getPermanent_hp() + fieldList.get(i).getTurn_hp() + fieldList.get(i).getBase_hp();
+
+				fieldList.get(i).setCur_hp(maxHp);
 
 				//戻り値の作成
 				HashMap<String, Object> detailMap = new HashMap<String, Object>();
 
 				detailMap.put("playerId", playerId);
 				detailMap.put("fieldNumber", i);
-				detailMap.put("tupDFE", fieldList.get(i).getTurn_def());
+				detailMap.put("hp", maxHp);
 				retList.add(detailMap);
 			}
 		}
