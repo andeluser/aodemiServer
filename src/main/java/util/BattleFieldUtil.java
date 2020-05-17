@@ -165,15 +165,48 @@ public class BattleFieldUtil {
 		dto.setPlayer_id(playerId);
 		dao.deleteBattle(dto);
 
+		StringUtil util = new StringUtil();
+
 		for (int i = 0; i < 25; i++) {
+			Card card = cardList.get(i);
+
 			dto.setBattle_id("T0001");
 			dto.setPlayer_id(playerId);
 			dto.setDeck_no(i);
 			dto.setSub_no(1);
 			dto.setNew_flg(1);
-			dto.setCard_id(cardList.get(i).getId());
+			dto.setCard_id(card.getId());
+			dto.setColor(card.getColor());
+			dto.setCard_type(card.getType());
+			dto.setCard_type1(card.getType1());
+			dto.setCard_type2(card.getType2());
+			dto.setLevel(util.getIntForString(card.getLevel()));
+			dto.setStock(util.getIntForString(card.getStock()));
+			dto.setHp(util.getIntForString(card.getHp()));
+			dto.setAtk(util.getIntForString(card.getAtk()));
+			dto.setDef(util.getIntForString(card.getDef()));
+			dto.setAgi(util.getIntForString(card.getAgi()));
+			dto.setRng(util.getIntForString(card.getRng()));
 			dto.setCard_lock(0);
 			dto.setCard_out(0);
+
+			if (card.getOpenSkillName() != null &&  !"".equals(card.getOpenSkillName())) {
+				dto.setOpen_skill(1);
+			} else {
+				dto.setOpen_skill(0);
+			}
+
+			if (card.getAutoSkillName() != null &&  !"".equals(card.getAutoSkillName())) {
+				dto.setStart_skill(1);
+			} else {
+				dto.setStart_skill(0);
+			}
+
+			if (card.getCloseSkillName() != null &&  !"".equals(card.getCloseSkillName())) {
+				dto.setClose_skill(1);
+			} else {
+				dto.setClose_skill(0);
+			}
 
 			dao.insert(dto);
 		}
