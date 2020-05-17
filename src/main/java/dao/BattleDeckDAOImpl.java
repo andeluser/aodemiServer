@@ -36,8 +36,22 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 	    		ret.setSub_no(rs.getInt("SUB_NO"));
 	    		ret.setNew_flg(rs.getInt("NEW_FLG"));
 	    		ret.setCard_id(rs.getString("CARD_ID"));
+	    		ret.setColor(rs.getString("COLOR"));
+	    		ret.setCard_type(rs.getString("CARD_TYPE"));
+	    		ret.setCard_type1(rs.getString("CARD_TYPE1"));
+	    		ret.setCard_type2(rs.getString("CARD_TYPE2"));
+	    		ret.setLevel(rs.getInt("LEVEL"));
+	    		ret.setStock(rs.getInt("STOCK"));
+	    		ret.setHp(rs.getInt("HP"));
+	    		ret.setAtk(rs.getInt("ATK"));
+	    		ret.setDef(rs.getInt("DEF"));
+	    		ret.setAgi(rs.getInt("AGI"));
+	    		ret.setRng(rs.getInt("RNG"));
 	    		ret.setCard_lock(rs.getInt("CARD_LOCK"));
 	    		ret.setCard_out(rs.getInt("CARD_OUT"));
+	    		ret.setOpen_skill(rs.getInt("OPEN_SKILL"));
+	    		ret.setStart_skill(rs.getInt("START_SKILL"));
+	    		ret.setClose_skill(rs.getInt("CLOSE_SKILL"));
 	    		ret.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 	    	}
 
@@ -87,8 +101,22 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 	    		dto.setSub_no(rs.getInt("SUB_NO"));
 	    		dto.setNew_flg(rs.getInt("NEW_FLG"));
 	    		dto.setCard_id(rs.getString("CARD_ID"));
+	    		dto.setColor(rs.getString("COLOR"));
+	    		dto.setCard_type(rs.getString("CARD_TYPE"));
+	    		dto.setCard_type1(rs.getString("CARD_TYPE1"));
+	    		dto.setCard_type2(rs.getString("CARD_TYPE2"));
+	    		dto.setStock(rs.getInt("STOCK"));
+	    		dto.setLevel(rs.getInt("LEVEL"));
+	    		dto.setHp(rs.getInt("HP"));
+	    		dto.setAtk(rs.getInt("ATK"));
+	    		dto.setDef(rs.getInt("DEF"));
+	    		dto.setAgi(rs.getInt("AGI"));
+	    		dto.setRng(rs.getInt("RNG"));
 	    		dto.setCard_lock(rs.getInt("CARD_LOCK"));
 	    		dto.setCard_out(rs.getInt("CARD_OUT"));
+	    		dto.setOpen_skill(rs.getInt("OPEN_SKILL"));
+	    		dto.setStart_skill(rs.getInt("START_SKILL"));
+	    		dto.setClose_skill(rs.getInt("CLOSE_SKILL"));
 	    		dto.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 
 	    		list.add(dto);
@@ -131,8 +159,22 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 					+ ", '" + dto.getSub_no() + "'"
 					+ ", '" + dto.getNew_flg() + "'"
 					+ ", '" + dto.getCard_id() + "'"
+					+ ", '" + dto.getColor() + "'"
+					+ ", '" + dto.getCard_type() + "'"
+					+ ", '" + dto.getCard_type1() + "'"
+					+ ", '" + dto.getCard_type2() + "'"
+					+ ", '" + dto.getLevel() + "'"
+					+ ", '" + dto.getStock() + "'"
+					+ ", '" + dto.getHp() + "'"
+					+ ", '" + dto.getAtk() + "'"
+					+ ", '" + dto.getDef() + "'"
+					+ ", '" + dto.getAgi() + "'"
+					+ ", '" + dto.getRng() + "'"
 					+ ", '" + dto.getCard_lock() + "'"
 					+ ", '" + dto.getCard_out() + "'"
+					+ ", '" + dto.getOpen_skill() + "'"
+					+ ", '" + dto.getStart_skill() + "'"
+					+ ", '" + dto.getClose_skill() + "'"
 					+ ", CURRENT_TIMESTAMP)";
 
 			ret = stmt.executeUpdate(sql);
@@ -199,8 +241,23 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 //					+ ", SUB_NO = '" + dto.getSub_no() + "'"
 //					+ ", NEW_FLG = '" + dto.getNew_flg() + "'"
 					+ "CARD_ID = '" + dto.getCard_id() + "'"
+					+ ", COLOR = '" + dto.getColor() + "'"
+					+ ", CARD_TYPE = '" + dto.getCard_type() + "'"
+					+ ", CARD_TYPE1 = '" + dto.getCard_type1() + "'"
+					+ ", CARD_TYPE2 = '" + dto.getCard_type2() + "'"
+					+ ", LEVEL = '" + dto.getLevel() + "'"
+					+ ", STOCK = '" + dto.getStock() + "'"
+					+ ", LEVEL = '" + dto.getLevel() + "'"
+					+ ", HP = '" + dto.getHp() + "'"
+					+ ", ATK = '" + dto.getAtk() + "'"
+					+ ", DEF = '" + dto.getDef() + "'"
+					+ ", AGI = '" + dto.getAgi() + "'"
+					+ ", RNG = '" + dto.getRng() + "'"
 					+ ", CARD_LOCK = '" + dto.getCard_lock() + "'"
 					+ ", CARD_OUT = '" + dto.getCard_out() + "'"
+					+ ", DEF = '" + dto.getDef() + "'"
+					+ ", AGI = '" + dto.getAgi() + "'"
+					+ ", RNG = '" + dto.getRng() + "'"
 					+ ", UPDATE_DATE = CURRENT_TIMESTAMP"
 					+ " WHERE BATTLE_ID = '" + dto.getBattle_id() + "' AND PLAYER_ID = '" + dto.getPlayer_id()+ "' AND DECK_NO ='" + dto.getDeck_no() + "'";
 

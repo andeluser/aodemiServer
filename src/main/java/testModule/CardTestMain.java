@@ -16,9 +16,9 @@ public class CardTestMain {
 
 		String battleID = "T0001";
 		//プレイヤー１
-		String playerId1 = "B";
+		String playerId1 = "A";
 		//対象の位置
-		int fieldNumber = 0;
+		int fieldNumber = 1;
 
 		try {
 
@@ -26,7 +26,7 @@ public class CardTestMain {
 
 			StringUtil stringUtil = new StringUtil();
 
-			String targetString = "[{\"targetList\":[{\"playerId\":\"B\",\"list\":[1]}]}]";
+			String targetString = "[{\"targetList\":[{\"playerId\":\"A\",\"list\":[0]}]}]";
 
 			ArrayList target = stringUtil.getJsonArray(targetString);
 
@@ -39,26 +39,29 @@ public class CardTestMain {
 //			boolean cheack = util.returnCheack("b4");
 //			System.out.println(cheack);
 
+			HashMap<String, Object> result = new HashMap();
+			HashMap<String, Object> result2 = new HashMap();
+
 			/*
 			 *
 			 * 各種カードのテスト用
 			 *
 			 */
 
-			CardAbility cardAbility = ability.getCardAbility("b5");
-//
-			HashMap<String, Object> result = cardAbility.open(battleID, playerId1);
-//			HashMap<String, Object> result2 = cardAbility.openSelect(battleID, playerId1, target);
-//			HashMap<String, Object> result = cardAbility.start(battleID, playerId1, fieldNumber);
-//			HashMap<String, Object> result2 = cardAbility.startSelect(battleID, playerId1, target, fieldNumber);
-//			HashMap<String, Object> result = cardAbility.auto(battleID, playerId1, fieldNumber);
-//			HashMap<String, Object> result2 = cardAbility.autoSelect(battleID, playerId1, target, fieldNumber);
-//			HashMap<String, Object> result = cardAbility.action1(battleID, playerId1, fieldNumber);
-//			HashMap<String, Object> result2 = cardAbility.actionSelect1(battleID, playerId1, target, fieldNumber);
-//			HashMap<String, Object> result = cardAbility.action2(battleID, playerId1, fieldNumber);
-//			HashMap<String, Object> result2 = cardAbility.actionSelect2(battleID, playerId1, target, fieldNumber);
-//			HashMap<String, Object> result = cardAbility.close(battleID, playerId1, fieldNumber);
-//			HashMap<String, Object> result2 = cardAbility.closeSelect(battleID, playerId1, target, fieldNumber);
+			CardAbility cardAbility = ability.getCardAbility("b20");
+
+//			result = cardAbility.open(battleID, playerId1);
+//			result2 = cardAbility.openSelect(battleID, playerId1, target);
+//			result = cardAbility.start(battleID, playerId1, fieldNumber);
+//			result2 = cardAbility.startSelect(battleID, playerId1, target, fieldNumber);
+//			result = cardAbility.auto(battleID, playerId1, fieldNumber);
+//			result2 = cardAbility.autoSelect(battleID, playerId1, target, fieldNumber);
+			result = cardAbility.action1(battleID, playerId1, fieldNumber);
+			result2 = cardAbility.actionSelect1(battleID, playerId1, target, fieldNumber);
+//			result = cardAbility.action2(battleID, playerId1, fieldNumber);
+//			result2 = cardAbility.actionSelect2(battleID, playerId1, target, fieldNumber);
+//			result = cardAbility.close(battleID, playerId1, fieldNumber);
+//			result2 = cardAbility.closeSelect(battleID, playerId1, target, fieldNumber);
 
 			/*
 			 *
@@ -67,8 +70,8 @@ public class CardTestMain {
 			 */
 
 //			ShieldAbility shieldAbility = ability.getShieldAbility("b85");
-//			HashMap<String, Object> result = shieldAbility.shieldSkill(battleID, playerId1);
-//			HashMap<String, Object> result = shieldAbility.shieldSkillSelect(battleID, playerId1);
+//			result = shieldAbility.shieldSkill(battleID, playerId1);
+//			result2 = shieldAbility.shieldSkillSelect(battleID, playerId1);
 
 			/*
 			 *
@@ -77,12 +80,12 @@ public class CardTestMain {
 			 */
 
 //			SpecialAbility specialAbility = ability.getSpecialAbility("o1");
-//			HashMap<String, Object> result = specialAbility.specialSkill(battleID, playerId1);
-//			HashMap<String, Object> result = specialAbility.specialSkillSelect(battleID, playerId1);
+//			result = specialAbility.specialSkill(battleID, playerId1);
+//			result2 = specialAbility.specialSkillSelect(battleID, playerId1);
 
 
 			System.out.println("result1:" + stringUtil.getJsonStr(result));
-//			System.out.println("result2:" + stringUtil.getJsonStr(result2));
+			System.out.println("result2:" + stringUtil.getJsonStr(result2));
 
 
 		} catch (Exception e) {

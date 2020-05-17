@@ -164,7 +164,6 @@ public class CardUtil {
 				ret.setId(getStringCellValue(row.getCell(this.specialColumIndex.get("id"))));
 				ret.setColor(getStringCellValue(row.getCell(this.specialColumIndex.get("color"))));
 				ret.setStock(getStringCellValue(row.getCell(this.specialColumIndex.get("stock"))));
-				ret.setId(getStringCellValue(row.getCell(this.specialColumIndex.get("id"))));
 				break;
 			}
 		}
