@@ -20,6 +20,7 @@ public class BattleBaseDTO {
 	private String cemetery;
 	private String disappearance;
 	private int sp;
+	private int turn_up_sp;
 	private int magic;
 	private int divine;
 	private Timestamp update_date;
@@ -143,6 +144,12 @@ public class BattleBaseDTO {
 	}
 	public void setNew_flg(int new_flg) {
 		this.new_flg = new_flg;
+	}
+	public int getTurn_up_sp() {
+		return turn_up_sp;
+	}
+	public void setTurn_up_sp(int turn_up_sp) {
+		this.turn_up_sp = turn_up_sp;
 	}
 
 }

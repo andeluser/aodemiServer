@@ -46,6 +46,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
 	    		ret.setCemetery(rs.getString("CEMETERY"));
 	    		ret.setDisappearance(rs.getString("DISAPPEARANCE"));
 	    		ret.setSp(rs.getInt("SP"));
+	    		ret.setTurn_up_sp(rs.getInt("TURN_UP_SP"));
 	    		ret.setMagic(rs.getInt("MAGIC"));
 	    		ret.setDivine(rs.getInt("DIVINE"));
 	    		ret.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
@@ -99,6 +100,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
 					+ ", '" + dto.getCemetery() + "'"
 					+ ", '" + dto.getDisappearance() + "'"
 					+ ", '" + dto.getSp() + "'"
+					+ ", '" + dto.getTurn_up_sp() + "'"
 					+ ", '" + dto.getMagic() + "'"
 					+ ", '" + dto.getDivine() + "'"
 					+ ", CURRENT_TIMESTAMP)";
@@ -174,6 +176,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
     				+ ", CEMETERY = '" + dto.getCemetery() + "'"
     				+ ", DISAPPEARANCE = '" + dto.getDisappearance() + "'"
     				+ ", SP = '" + dto.getSp() + "'"
+					+ ", TURN_UP_SP = '" + dto.getTurn_up_sp() + "'"
     				+ ", MAGIC = '" + dto.getMagic() + "'"
     				+ ", DIVINE = '" + dto.getDivine() + "'"
     				+ ", UPDATE_DATE = CURRENT_TIMESTAMP"

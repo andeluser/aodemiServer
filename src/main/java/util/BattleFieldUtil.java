@@ -68,6 +68,7 @@ public class BattleFieldUtil {
 		dto.setCemetery("");
 		dto.setDisappearance("");
 		dto.setSp(3);
+		dto.setTurn_up_sp(2);
 		dto.setMagic(0);
 		dto.setDivine(0);
 

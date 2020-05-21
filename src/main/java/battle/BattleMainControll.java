@@ -333,11 +333,14 @@ public class BattleMainControll {
 	  	*/
 
 		baseDto.setSp(baseDto.getSp()
-				+ 2
+				+ baseDto.getTurn_up_sp()
 				- stringUtil.getIntForString(yellowMana)
 				- stringUtil.getIntForString(blackMana)
 				- stringUtil.getIntForString(redMana)
 				- stringUtil.getIntForString(blueMana));
+
+		//次の増加SPは計算に入れたら元に戻しておく
+		baseDto.setTurn_up_sp(2);
 
     	//復活で使ったSPを引く
 //    	int revivalSp = 0;
