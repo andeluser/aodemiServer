@@ -40,6 +40,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
 	    		ret.setSpecial_gage(rs.getInt("SPECIAL_GAGE"));
 	    		ret.setSpecial_stock(rs.getInt("SPECIAL_STOCK"));
 	    		ret.setSpecial_use(rs.getInt("SPECIAL_USE"));
+	    		ret.setSpecial_use_bye_skill(rs.getInt("SPECIAL_USE_BYE_SKILL"));
 	    		ret.setLife(rs.getInt("LIFE"));
 	    		ret.setSet_card(rs.getString("SET_CARD"));
 	    		ret.setSet_deck_no(rs.getInt("SET_DECK_NO"));
@@ -94,6 +95,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
 					+ ", '" + dto.getSpecial_gage() + "'"
 					+ ", '" + dto.getSpecial_stock() + "'"
 					+ ", '" + dto.getSpecial_use() + "'"
+					+ ", '" + dto.getSpecial_use_bye_skill() + "'"
 					+ ", '" + dto.getLife() + "'"
 					+ ", '" + dto.getSet_card() + "'"
 					+ ", '" + dto.getSet_deck_no() + "'"
@@ -170,6 +172,7 @@ public class BattleBaseDAOImpl implements BattleBaseDAO {
     				+ ", SPECIAL_GAGE = '" + dto.getSpecial_gage() + "'"
     				+ ", SPECIAL_STOCK = '" + dto.getSpecial_stock() + "'"
     				+ ", SPECIAL_USE = '" + dto.getSpecial_use() + "'"
+    				+ ", SPECIAL_USE_BYE_SKILL = '" + dto.getSpecial_use_bye_skill() + "'"
     				+ ", LIFE = '" + dto.getLife() + "'"
     				+ ", SET_CARD = '" + dto.getSet_card() + "'"
     				+ ", SET_DECK_NO = '" + dto.getSet_deck_no() + "'"

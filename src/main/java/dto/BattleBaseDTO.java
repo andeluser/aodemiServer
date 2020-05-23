@@ -14,6 +14,7 @@ public class BattleBaseDTO {
 	private int special_gage;
 	private int special_stock;
 	private int special_use;
+	private int special_use_bye_skill;
 	private int life;
 	private String set_card;
 	private int set_deck_no;
@@ -85,6 +86,13 @@ public class BattleBaseDTO {
 	public void setSpecial_use(int special_use) {
 		this.special_use = special_use;
 	}
+	public int getSpecial_use_bye_skill() {
+		return special_use_bye_skill;
+	}
+	public void setSpecial_use_bye_skill(int special_use_bye_skill) {
+		this.special_use_bye_skill = special_use_bye_skill;
+	}
+
 	public int getLife() {
 		return life;
 	}
