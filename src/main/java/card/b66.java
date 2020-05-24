@@ -37,7 +37,8 @@ public class b66 implements CardAbility {
 		detailMap.put("SPECIAL_USE_BYE_SKILL", special_use_bye_skill);
 		list.add(detailMap);
 
-		updateMap.put("special_use_by_skill", list);
+		//updateinfoは空でよい
+		//updateMap.put("special_use_by_skill", list);
 		updateList.add(updateMap);
 
 		ret.put("updateInfo", updateList);
