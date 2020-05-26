@@ -26,23 +26,23 @@ public class b66 implements CardAbility {
 		baseDto.setSpecial_use_bye_skill(special_use_bye_skill);
 		baseDao.update(baseDto);
 
-		//戻り値設定
-		HashMap<String, Object> updateMap = new HashMap<String, Object>();
-		ArrayList<Object> updateList = new ArrayList<Object>();
-
-		HashMap<String, Object> detailMap = new HashMap<String, Object>();
-		ArrayList<Object> list = new ArrayList<Object>();
-
-		detailMap.put("playerId", playerId);
-		detailMap.put("SPECIAL_USE_BYE_SKILL", special_use_bye_skill);
-		list.add(detailMap);
-
-		//updateinfoは空でよい
-		//updateMap.put("special_use_by_skill", list);
-		updateList.add(updateMap);
-
-		ret.put("updateInfo", updateList);
-		ret.put("target", new ArrayList<Object>());
+//		//戻り値設定
+//		HashMap<String, Object> updateMap = new HashMap<String, Object>();
+//		ArrayList<Object> updateList = new ArrayList<Object>();
+//
+//		HashMap<String, Object> detailMap = new HashMap<String, Object>();
+//		ArrayList<Object> list = new ArrayList<Object>();
+//
+//		detailMap.put("playerId", playerId);
+//		detailMap.put("SPECIAL_USE_BYE_SKILL", special_use_bye_skill);
+//		list.add(detailMap);
+//
+//		//updateinfoは空でよい
+//		//updateMap.put("special_use_by_skill", list);
+//		updateList.add(updateMap);
+//
+//		ret.put("updateInfo", updateList);
+//		ret.put("target", new ArrayList<Object>());
 
 		return ret;
 
