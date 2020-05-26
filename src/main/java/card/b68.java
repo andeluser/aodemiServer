@@ -11,8 +11,8 @@ import dto.BattleFieldDTO;
 import factory.DaoFactory;
 import util.BattleFieldUtil;
 
-//シザービートル
-public class b64 implements CardAbility {
+//火を操る魔術師
+public class b68 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> open(String battleID, String playerId) throws Exception {
@@ -40,7 +40,7 @@ public class b64 implements CardAbility {
 		return null;
 	}
 
-	//突進
+	//ファイアボール
 	@Override
 	public HashMap<String, Object> auto(String battleID, String playerId, int fieldNumber) throws Exception {
 		HashMap<String, Object> ret = new HashMap<String, Object>();
@@ -75,7 +75,7 @@ public class b64 implements CardAbility {
 			BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, enemyPlayerId, target);
 
 			//ダメージ量を計算
-			int attack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
+			int attack = 20;
 			attack = attack - (enemyFieldDto.getPermanent_def() + enemyFieldDto.getTurn_def() + enemyFieldDto.getCur_def());
 
 			if (attack <= 0) {
@@ -98,7 +98,6 @@ public class b64 implements CardAbility {
 
 			fieldDao.update(enemyFieldDto);
 
-
 			//戻り値を設定
 			HashMap<String, Object> updateMap = new HashMap<String, Object>();
 
@@ -107,25 +106,6 @@ public class b64 implements CardAbility {
 			updateMap.put("playerId", enemyPlayerId);
 			ArrayList<HashMap<String, Object>> updateList = new ArrayList<HashMap<String, Object>>();
 			updateList.add(updateMap);
-
-			//自分のアクション終了
-			fieldDto.setAction(1);
-			fieldDao.update(fieldDto);
-
-			//戻り値を設定
-			HashMap<String, Object> detailMap = new HashMap<String, Object>();
-
-			detailMap.put("playerId", playerId);
-			detailMap.put("fieldNumber", fieldNumber);
-			detailMap.put("remove", "actionEnd");
-
-			ArrayList<Object> mylist = new ArrayList<Object>();
-			mylist.add(detailMap);
-
-			HashMap<String, Object> myMap = new HashMap<String, Object>();
-			myMap.put("field", mylist);
-
-			updateList.add(myMap);
 
 			HashMap<String, Object> orderMap = new HashMap<String, Object>();
 			ArrayList<Object> orderList = new ArrayList<Object>();
