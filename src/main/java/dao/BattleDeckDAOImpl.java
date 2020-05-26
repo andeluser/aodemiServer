@@ -247,7 +247,6 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 					+ ", CARD_TYPE2 = '" + dto.getCard_type2() + "'"
 					+ ", LEVEL = '" + dto.getLevel() + "'"
 					+ ", STOCK = '" + dto.getStock() + "'"
-					+ ", LEVEL = '" + dto.getLevel() + "'"
 					+ ", HP = '" + dto.getHp() + "'"
 					+ ", ATK = '" + dto.getAtk() + "'"
 					+ ", DEF = '" + dto.getDef() + "'"
@@ -255,9 +254,9 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 					+ ", RNG = '" + dto.getRng() + "'"
 					+ ", CARD_LOCK = '" + dto.getCard_lock() + "'"
 					+ ", CARD_OUT = '" + dto.getCard_out() + "'"
-					+ ", DEF = '" + dto.getDef() + "'"
-					+ ", AGI = '" + dto.getAgi() + "'"
-					+ ", RNG = '" + dto.getRng() + "'"
+					+ ", OPEN_SKILL = '" + dto.getOpen_skill() + "'"
+					+ ", START_SKILL = '" + dto.getStart_skill() + "'"
+					+ ", CLOSE_SKILL = '" + dto.getClose_skill() + "'"
 					+ ", UPDATE_DATE = CURRENT_TIMESTAMP"
 					+ " WHERE BATTLE_ID = '" + dto.getBattle_id() + "' AND PLAYER_ID = '" + dto.getPlayer_id()+ "' AND DECK_NO ='" + dto.getDeck_no() + "'";
 
