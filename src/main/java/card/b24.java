@@ -9,8 +9,8 @@ import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
 
-//黒首輪の番犬
-public class b21 implements CardAbility {
+//影縛り
+public class b24 implements CardAbility {
 
 	@Override
 	public HashMap<String, Object> open(String battleID, String playerId) throws Exception {
@@ -19,35 +19,34 @@ public class b21 implements CardAbility {
 		DaoFactory factory = new DaoFactory();
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
-		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
+		BattleControllDTO controllDto = controllDao.getAllValue(battleID);
 
-		ArrayList<Object> retTargetList = new ArrayList<Object>();
+		ArrayList<Object> myretTargetList = new ArrayList<Object>();
+		ArrayList<Object> enemyretTargetList = new ArrayList<Object>();
 
 		//相手プレイヤーのID取得
-		String enemyPlayerId = "";
-		if (playerId.equals(controllDTO.getPlayer_id_1())) {
-			enemyPlayerId = controllDTO.getPlayer_id_2();
-		} else {
-			enemyPlayerId = controllDTO.getPlayer_id_1();
+		String enemyPlayerId = playerId;
+		if (playerId.equals(controllDto.getPlayer_id_1())) {
+			enemyPlayerId = controllDto.getPlayer_id_2();
 		}
 
 		//対象を計算する
 		//自分の対象計算
-		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
-		ArrayList<Object> targetList = new ArrayList<Object>();
+		ArrayList<BattleFieldDTO> myFieldDtoList = fieldDao.getAllList(battleID, playerId);
+		ArrayList<Object> myTargetList = new ArrayList<Object>();
 
-		for (int i = 0; i < fieldDtoList.size(); i++) {
-			BattleFieldDTO list = fieldDtoList.get(i);
+		for (int i = 0; i < myFieldDtoList.size(); i++) {
+			BattleFieldDTO list = myFieldDtoList.get(i);
 			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0) {
-				targetList.add(fieldDtoList.get(i).getField_no());
+				myTargetList.add(myFieldDtoList.get(i).getField_no());
 			}
 		}
 
-		if (targetList.size() != 0) {
+		if (myTargetList.size() != 0) {
 			HashMap<String, Object> myTarget = new HashMap<String, Object>();
 			myTarget.put("playerId", playerId);
-			myTarget.put("list", targetList);
-			retTargetList.add(myTarget);
+			myTarget.put("list", myTargetList);
+			myretTargetList.add(myTarget);
 		}
 
 		//相手の対象計算
@@ -65,21 +64,29 @@ public class b21 implements CardAbility {
 			HashMap<String, Object> enemyTarget = new HashMap<String, Object>();
 			enemyTarget.put("playerId", enemyPlayerId);
 			enemyTarget.put("list", enemyTargetList);
-			retTargetList.add(enemyTarget);
+			enemyretTargetList.add(enemyTarget);
 		}
 
 		//対象が一人も居ない場合は処理終了
-		if (targetList.size() == 0 && enemyTargetList.size() == 0) {
+		if (myTargetList.size() == 0 && enemyTargetList.size() == 0) {
 			return new HashMap<String, Object>();
 		}
 
 		//戻り値設定
-		HashMap<String, Object> retMap = new HashMap<String, Object>();
+		HashMap<String, Object> myretMap = new HashMap<String, Object>();
+		HashMap<String, Object> enemyretMap = new HashMap<String, Object>();
 		ArrayList retList = new ArrayList();
 
-		retMap.put("selectCount", 1);
-		retMap.put("targetList", retTargetList);
-		retList.add(retMap);
+		if (myTargetList.size() > 0) {
+			myretMap.put("selectCount", 1);
+			myretMap.put("targetList", myretTargetList);
+			retList.add(myretMap);
+		}
+		if (enemyTargetList.size() > 0) {
+			enemyretMap.put("selectCount", 1);
+			enemyretMap.put("targetList", enemyretTargetList);
+			retList.add(enemyretMap);
+		}
 
 		ret.put("updateInfo", new HashMap<String, Object>());
 		ret.put("target", retList);
@@ -102,7 +109,7 @@ public class b21 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; j < koList.size(); j++) {
+			for (int j = 0; i < koList.size(); i++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -111,8 +118,8 @@ public class b21 implements CardAbility {
 				for (int k= 0; k < list.size(); k++) {
 					BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
 
-					//対象ユニットのRNGをこのターン+2
-					fieldDto.setTurn_range(fieldDto.getTurn_range() + 2);
+					//対象ユニットを行動済にする
+					fieldDto.setAction(1);
 					fieldDao.update(fieldDto);
 
 					//戻り値の作成
@@ -120,7 +127,7 @@ public class b21 implements CardAbility {
 
 					detailMap.put("playerId", player1);
 					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("tupRNG", fieldDto.getTurn_range());
+					detailMap.put("remove", "actionEnd");
 					retList.add(detailMap);
 				}
 			}
