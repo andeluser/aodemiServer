@@ -159,7 +159,7 @@ public class b13 implements CardAbility {
 
 					detailMap.put("playerId", player1);
 					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("upATK", 20);
+					detailMap.put("upATK", enemyFieldDto.getPermanent_atk());
 					detailMap.put("remove", "actionEnd");
 					retList.add(detailMap);
 				}
