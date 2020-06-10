@@ -8,7 +8,6 @@ import dao.BattleFieldDAO;
 import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
-import util.BattleFieldUtil;
 
 //有翼聖騎士
 public class b13 implements CardAbility {
@@ -58,21 +57,16 @@ public class b13 implements CardAbility {
 		}
 
 		//スキルの対象を計算
-		BattleFieldUtil battleUtil = new BattleFieldUtil();
-		ArrayList<Object> tmpList = battleUtil.getRangeTargetList(controllDto, playerId, fieldNumber);
-
 		ArrayList<Object> targetList = new ArrayList<Object>();
 		ArrayList<BattleFieldDTO> dtoList = fieldDao.getAllList(battleID, enemyPlayerId);
 
 		//行動済のキャラクターは除外する
-		for (int i = 0; i < tmpList.size(); i++) {
+		for (int i = 0; i < dtoList.size(); i++) {
 
-			int number = Integer.parseInt(tmpList.get(i).toString());
+			BattleFieldDTO dto = dtoList.get(i);
 
-			BattleFieldDTO dto = dtoList.get(number);
-
-			if (!"".equals(dto.getCard_id()) && dto.getAction() == 0 ) {
-				targetList.add(number);
+			if (!"".equals(dto.getCard_id()) && dto.getAction() == 0 && dto.getClose() == 0) {
+				targetList.add(i);
 			}
 		}
 
@@ -132,7 +126,7 @@ public class b13 implements CardAbility {
 					BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, player1, list.get(k));
 
 					//対象のatkを20上げる
-					enemyFieldDto.setPermanent_atk(enemyFieldDto.getPermanent_atk() + 20);
+					enemyFieldDto.setPermanent_atk(enemyFieldDto.getPermanent_atk() + 10);
 					//アクション終了する
 					enemyFieldDto.setAction(1);
 					fieldDao.update(enemyFieldDto);

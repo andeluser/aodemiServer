@@ -259,8 +259,8 @@ public class BattleFieldUtil {
 		int rng = unlimited + limited + base;
 
 		//ユニット配置情報を取得する
-		//位置が4以上で1～3にユニットが居れば射程-1
-		if (fieldNumber >= 4) {
+		//位置が4以上で0～2にユニットが居れば射程-1
+		if (fieldNumber >= 3) {
 			if ((!"".equals(fieldList.get(0).getCard_id()) && fieldList.get(0).getClose() == 0) ||
 					(!"".equals(fieldList.get(1).getCard_id()) && fieldList.get(1).getClose() == 0) ||
 					(!"".equals(fieldList.get(2).getCard_id()) && fieldList.get(2).getClose() == 0)) {
@@ -268,8 +268,8 @@ public class BattleFieldUtil {
 			}
 		}
 
-		//位置が7以上で4～6にユニットが居れば射程-1
-		if (fieldNumber >= 7) {
+		//位置が7以上で3～5にユニットが居れば射程-1
+		if (fieldNumber >= 6) {
 			if ((!"".equals(fieldList.get(3).getCard_id()) && fieldList.get(3).getClose() == 0) ||
 					(!"".equals(fieldList.get(4).getCard_id()) && fieldList.get(4).getClose() == 0) ||
 					(!"".equals(fieldList.get(5).getCard_id()) && fieldList.get(5).getClose() == 0)) {
