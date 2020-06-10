@@ -50,7 +50,7 @@ public class m48 implements ShieldAbility {
 		for (int i = 0; i < fieldDtoList.size(); i++) {
 			BattleFieldDTO list = fieldDtoList.get(i);
 
-			int agi = list.getPermanent_level() + list.getTurn_level() + list.getCur_level();
+			int agi = list.getPermanent_speed() + list.getTurn_speed() + list.getCur_speed();
 			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0 && list.getAction() == 0 && agi <= 4) {
 				targetList.add(fieldDtoList.get(i).getField_no());
 			}
@@ -72,7 +72,7 @@ public class m48 implements ShieldAbility {
 		for (int i = 0; i < enemyFieldDtoList.size(); i++) {
 			BattleFieldDTO list = enemyFieldDtoList.get(i);
 
-			int agi = list.getPermanent_level() + list.getTurn_level() + list.getCur_level();
+			int agi = list.getPermanent_speed() + list.getTurn_speed() + list.getCur_speed();
 			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 0 && list.getAction() == 0 && agi <= 4) {
 				enemyTargetList.add(enemyFieldDtoList.get(i).getField_no());
 			}
