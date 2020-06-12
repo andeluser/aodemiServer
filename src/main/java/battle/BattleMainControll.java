@@ -1068,6 +1068,23 @@ public class BattleMainControll {
     			target = (ArrayList<Object>) shieldMap.get("target");
     		}
 
+    		//開始前に覚醒ゲージを１０増やす
+    		BattleBaseDAO baseDao = factory.createBaseDAO();
+    		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, shieldMap.get("playerId").toString());
+    		int gage = baseDto.getSpecial_gage() + 10;
+
+    		if (gage >= 20) {
+    			gage = gage - 20;
+    			baseDto.setSpecial_stock(baseDto.getSpecial_stock() + 1);
+
+    			if (baseDto.getSpecial_stock() > 5) {
+    				baseDto.setSpecial_stock(5);
+    			}
+    		}
+
+    		baseDto.setSpecial_gage(gage);
+    		baseDao.update(baseDto);
+
     		//対象選択の有無で処理を切り分ける
     		if (target.size() != 0) {
     			//次の行動が自分
@@ -1891,23 +1908,37 @@ public class BattleMainControll {
 
         	} else if (len == 6) {
         		//シールドブレイク処理
-        		//処理前にＳＰを１減らす
-        		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
-        		baseDto.setSp(baseDto.getSp() - 1);
-        		baseDao.update(baseDto);
-
-        		//自分をアクション終了にする
-        		BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, actionPlayer, fieldNumber);
-        		fieldDto.setAction(1);
-        		fieldDao.update(fieldDto);
-
-        		//相手のシールドを攻撃する
         		String enemyPlayerId = "";
         		if (playerId.equals(controllDto.getPlayer_id_1())) {
         			enemyPlayerId = controllDto.getPlayer_id_2();
         		} else {
         			enemyPlayerId = controllDto.getPlayer_id_1();
         		}
+
+        		//処理前にＳＰを１減らす
+        		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, enemyPlayerId);
+        		baseDto.setSp(baseDto.getSp() - 1);
+        		baseDao.update(baseDto);
+
+        		//開始前に覚醒ゲージを１０増やす
+        		int gage = baseDto.getSpecial_gage() + 10;
+
+        		if (gage >= 20) {
+        			gage = gage - 20;
+        			baseDto.setSpecial_stock(baseDto.getSpecial_stock() + 1);
+
+        			if (baseDto.getSpecial_stock() > 5) {
+        				baseDto.setSpecial_stock(5);
+        			}
+        		}
+
+        		baseDto.setSpecial_gage(gage);
+        		baseDao.update(baseDto);
+
+        		//自分をアクション終了にする
+        		BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, playerId, fieldNumber);
+        		fieldDto.setAction(1);
+        		fieldDao.update(fieldDto);
 
         		int breakShieldNumber = Integer.parseInt(battleAction.substring(5, 6));
         		HashMap<String, Object> breakInfo = battleFieldUtil.breakShield(enemyPlayerId, breakShieldNumber);

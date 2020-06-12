@@ -24,9 +24,6 @@ public class m46 implements ShieldAbility {
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
 		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
-		BattleBaseDAO baseDao = factory.createBaseDAO();
-
-		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
 		String enemyPlayerId = "";
 		if (playerId.equals(controllDTO.getPlayer_id_1())) {
@@ -34,6 +31,17 @@ public class m46 implements ShieldAbility {
 		} else {
 			enemyPlayerId = controllDTO.getPlayer_id_1();
 		}
+
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
+
+		if (baseDto.getSp() < 1) {
+			return ret;
+		}
+
+		//SPを1減らす
+		baseDto.setSp(baseDto.getSp() - 1);
+		baseDao.update(baseDto);
 
 		//リムーブフェーズ以外、あるいはライフが６以上なら処理しない
 		if (!"remove".equals(controllDTO.getPhase()) || baseDto.getLife() >= 6) {

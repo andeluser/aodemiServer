@@ -32,6 +32,17 @@ public class m45 implements ShieldAbility {
 			enemyPlayerId = controllDTO.getPlayer_id_1();
 		}
 
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
+
+		if (baseDto.getSp() < 1) {
+			return ret;
+		}
+
+		//SPを１減らす
+		baseDto.setSp(baseDto.getSp() - 1);
+		baseDao.update(baseDto);
+
 		ArrayList<Object> retTargetList = new ArrayList<Object>();
 
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);

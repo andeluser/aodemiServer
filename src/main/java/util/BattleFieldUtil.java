@@ -367,8 +367,32 @@ public class BattleFieldUtil {
 			//相手のHPを設定
 			enemyFieldDto.setCur_hp(enemyHp);
 
+			ArrayList<HashMap<String, Object>> updateList = new ArrayList<HashMap<String, Object>>();
+
 			//相手のHPがゼロ以下となった場合はクローズ判定を立てる
 			if (enemyHp <= 0) {
+
+				ExpansionUtil expansion = new ExpansionUtil();
+
+				//太古の力を持っている場合はHPを２０回復
+				if (expansion.returnCheack(fieldDto.getCard_id(), "AncientPower")) {
+					int maxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
+					int hp = fieldDto.getCur_hp() + 20;
+
+					if (hp > maxHp) {
+						hp = maxHp;
+					}
+
+					fieldDto.setCur_hp(hp);
+
+					HashMap<String, Object> updateMap = new HashMap<String, Object>();
+
+					updateMap.put("fieldNumber", fieldNumber);
+					updateMap.put("hp", hp);
+					updateMap.put("playerId", playerId);
+					updateList.add(updateMap);
+				}
+
 				fieldDao.setClose(battleID, enemyFieldDto.getPlayer_id(), enemyFieldDto.getField_no(), enemyFieldDto);
 			}
 
@@ -382,7 +406,6 @@ public class BattleFieldUtil {
 			updateMap.put("fieldNumber", target);
 			updateMap.put("hp", enemyHp);
 			updateMap.put("playerId", enemyPlayer);
-			ArrayList<HashMap<String, Object>> updateList = new ArrayList<HashMap<String, Object>>();
 			updateList.add(updateMap);
 
 			HashMap<String, Object> orderMap = new HashMap<String, Object>();
@@ -734,7 +757,7 @@ public class BattleFieldUtil {
 					fieldDao.update(fieldDto);
 
 					//復活時のSP減少確認
-					if (expansion.returnCheack(fieldDto.getCard_id())) {
+					if (expansion.returnCheack(fieldDto.getCard_id(), "return")) {
 						//復帰持ちの場合はSPを減らさない
 					} else {
 						baseDto.setSp(baseDto.getSp() - 1);

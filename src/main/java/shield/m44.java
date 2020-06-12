@@ -24,6 +24,8 @@ public class m44 implements ShieldAbility {
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
 		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
 		String enemyPlayerId = "";
 		if (playerId.equals(controllDTO.getPlayer_id_1())) {
@@ -31,6 +33,14 @@ public class m44 implements ShieldAbility {
 		} else {
 			enemyPlayerId = controllDTO.getPlayer_id_1();
 		}
+
+		if (baseDto.getSp() < 1) {
+			return ret;
+		}
+
+		//SPを１減らす
+		baseDto.setSp(baseDto.getSp() - 1);
+		baseDao.update(baseDto);
 
 		ArrayList<Object> retTargetList = new ArrayList<Object>();
 

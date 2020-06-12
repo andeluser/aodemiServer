@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ExpansionList>
-	<!-- 復帰能力候補 -->
+	<!-- 復帰 -->
 	<return>b4,m6,m22</return>
+	<!-- 太古の力（全ての行動で後退させた時に２０回復する能力だが、各スキル発動時はその処理中で回復させる事） -->
+	<AncientPower>m35</AncientPower>
 </ExpansionList>

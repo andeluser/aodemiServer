@@ -29,12 +29,12 @@ public class ExpansionUtil {
 	}
 
 	/**
-	 * 復帰有無判定。復帰持ちの対象だった場合はtrueを返却する
+	 * 能力保有判定。対象の能力持ちの対象だった場合はtrueを返却する
 	 */
-	public boolean returnCheack(String cardId) {
+	public boolean returnCheack(String cardId, String action) {
 
 		boolean ret = false;
-		NodeList nodeList = List.getElementsByTagName("return");
+		NodeList nodeList = List.getElementsByTagName(action);
 
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			// 要素をElementにキャストする

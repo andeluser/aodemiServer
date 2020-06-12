@@ -24,9 +24,6 @@ public class m48 implements ShieldAbility {
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
 		BattleControllDTO controllDTO = controllDao.getAllValue(battleID);
-		BattleBaseDAO baseDao = factory.createBaseDAO();
-
-		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
 		String enemyPlayerId = "";
 		if (playerId.equals(controllDTO.getPlayer_id_1())) {
@@ -39,6 +36,17 @@ public class m48 implements ShieldAbility {
 		if (!"remove".equals(controllDTO.getPhase())) {
 			return ret;
 		}
+
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
+
+		if (baseDto.getSp() < 1) {
+			return ret;
+		}
+
+		//SPを2減らす
+		baseDto.setSp(baseDto.getSp() - 2);
+		baseDao.update(baseDto);
 
 		ArrayList<Object> retTargetList = new ArrayList<Object>();
 

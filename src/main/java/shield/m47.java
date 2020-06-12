@@ -37,6 +37,17 @@ public class m47 implements ShieldAbility {
 			return ret;
 		}
 
+		BattleBaseDAO baseDao = factory.createBaseDAO();
+		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
+
+		if (baseDto.getSp() < 1) {
+			return ret;
+		}
+
+		//SPを2減らす
+		baseDto.setSp(baseDto.getSp() - 2);
+		baseDao.update(baseDto);
+
 		ArrayList<Object> retTargetList = new ArrayList<Object>();
 
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
