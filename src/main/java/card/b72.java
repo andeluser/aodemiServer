@@ -52,32 +52,33 @@ public class b72 implements CardAbility {
 		if(special_use != 1 && special_use_bye_skill != 1) {
 			return new HashMap<String, Object>();
 		}
-			detailMap.put("playerId", playerId);
-			detailMap.put("fieldNumber", fieldNumber);
 
-			//RNGを3にする
-			int curRng = 3 - fieldDto.getCur_range();
-			//ターン増加はゼロに
-			fieldDto.setTurn_range(0);
-			//永続増加は全体で3となるように調整
-			fieldDto.setPermanent_range(curRng);
+		detailMap.put("playerId", playerId);
+		detailMap.put("fieldNumber", fieldNumber);
 
-			fieldDao.update(fieldDto);
+		//RNGを3にする
+		int curRng = 3 - fieldDto.getCur_range();
+		//ターン増加はゼロに
+		fieldDto.setTurn_range(0);
+		//永続増加は全体で3となるように調整
+		fieldDto.setPermanent_range(curRng);
 
-			detailMap.put("playerId", playerId);
-			detailMap.put("fieldNumber", fieldNumber);
-			detailMap.put("tupRNG", fieldDto.getTurn_range());
-			detailMap.put("upRNG", fieldDto.getPermanent_range());
-			retList.add(detailMap);
+		fieldDao.update(fieldDto);
 
-			HashMap<String, Object> updateMap = new HashMap<String, Object>();
-			ArrayList<Object> updateList = new ArrayList<Object>();
+		detailMap.put("playerId", playerId);
+		detailMap.put("fieldNumber", fieldNumber);
+		detailMap.put("tupRNG", fieldDto.getTurn_range());
+		detailMap.put("upRNG", fieldDto.getPermanent_range());
+		retList.add(detailMap);
 
-			updateMap.put("field", retList);
-			updateList.add(updateMap);
+		HashMap<String, Object> updateMap = new HashMap<String, Object>();
+		ArrayList<Object> updateList = new ArrayList<Object>();
 
-			ret.put("updateInfo", updateList);
-			ret.put("target", new ArrayList<Object>());
+		updateMap.put("field", retList);
+		updateList.add(updateMap);
+
+		ret.put("updateInfo", updateList);
+		ret.put("target", new ArrayList<Object>());
 
 		return ret;
 	}
@@ -234,10 +235,6 @@ public class b72 implements CardAbility {
 
 					//ダメージ量を計算 防御無視
 					int attack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
-
-					if (attack <= 0) {
-						attack = 0;
-					}
 
 					//HP
 					int enemyHp = enemyFieldDto.getCur_hp();

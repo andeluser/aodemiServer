@@ -53,37 +53,38 @@ public class b71 implements CardAbility {
 		if(special_use != 1 && special_use_bye_skill != 1) {
 			return new HashMap<String, Object>();
 		}
-			detailMap.put("playerId", playerId);
-			detailMap.put("fieldNumber", fieldNumber);
 
-			//最大HP,現在HPを20増やす
-			int perHp = fieldDto.getPermanent_hp() + 20;
-			int hp = fieldDto.getCur_hp() + 20;
+		detailMap.put("playerId", playerId);
+		detailMap.put("fieldNumber", fieldNumber);
 
-			//ATKを10増やす
-			int perAtk =  fieldDto.getPermanent_atk() + 10;
+		//最大HP,現在HPを20増やす
+		int perHp = fieldDto.getPermanent_hp() + 20;
+		int hp = fieldDto.getCur_hp() + 20;
 
-			detailMap.put("playerId", playerId);
-			detailMap.put("fieldNumber", fieldNumber);
-			detailMap.put("hp", hp);
-			detailMap.put("perHp", perHp);
-			detailMap.put("perAtk", perAtk);
+		//ATKを10増やす
+		int perAtk =  fieldDto.getPermanent_atk() + 10;
 
-			fieldDto.setPermanent_atk(perAtk);
-			fieldDto.setPermanent_hp(perHp);
-			fieldDto.setCur_hp(hp);
-			fieldDao.update(fieldDto);
+		detailMap.put("playerId", playerId);
+		detailMap.put("fieldNumber", fieldNumber);
+		detailMap.put("hp", hp);
+		detailMap.put("upHP", perHp);
+		detailMap.put("upATK", perAtk);
 
-			retList.add(detailMap);
+		fieldDto.setPermanent_atk(perAtk);
+		fieldDto.setPermanent_hp(perHp);
+		fieldDto.setCur_hp(hp);
+		fieldDao.update(fieldDto);
 
-			HashMap<String, Object> updateMap = new HashMap<String, Object>();
-			ArrayList<Object> updateList = new ArrayList<Object>();
+		retList.add(detailMap);
 
-			updateMap.put("field", retList);
-			updateList.add(updateMap);
+		HashMap<String, Object> updateMap = new HashMap<String, Object>();
+		ArrayList<Object> updateList = new ArrayList<Object>();
 
-			ret.put("updateInfo", updateList);
-			ret.put("target", new ArrayList<Object>());
+		updateMap.put("field", retList);
+		updateList.add(updateMap);
+
+		ret.put("updateInfo", updateList);
+		ret.put("target", new ArrayList<Object>());
 
 
 
@@ -154,10 +155,6 @@ public class b71 implements CardAbility {
 
 			//ダメージ量を計算 防御は無視
 			int attack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
-
-			if (attack <= 0) {
-				attack = 0;
-			}
 
 			//HP
 			int enemyHp = enemyFieldDto.getCur_hp();
