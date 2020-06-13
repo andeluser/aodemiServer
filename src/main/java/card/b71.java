@@ -188,9 +188,14 @@ public class b71 implements CardAbility {
 			//自分のHP処理
 			int hp = fieldDto.getCur_hp();
 			int MaxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
+			int damage = (MaxHp/2) - (fieldDto.getCur_def() + fieldDto.getPermanent_def() + fieldDto.getTurn_def());
+
+			if (damage <= 0) {
+				damage = 0;
+			}
 
 			//HPを計算
-			hp = hp - (MaxHp/2);
+			hp = hp - damage;
 
 			//自分のHPを設定
 			fieldDto.setCur_hp(hp);
