@@ -40,7 +40,7 @@ public class m48 implements ShieldAbility {
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		if (baseDto.getSp() < 1) {
+		if (baseDto.getSp() < 2) {
 			return ret;
 		}
 
