@@ -373,7 +373,7 @@ public class b43 implements CardAbility {
 
 			//ダメージATK
 			int ATK = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
-			int attack = ATK - (fieldDto.getPermanent_def() + fieldDto.getTurn_def() + fieldDto.getCur_def());
+			int attack = ATK - (enemyFieldDto.getPermanent_def() + enemyFieldDto.getTurn_def() + enemyFieldDto.getCur_def());
 
 			if (attack <= 0) {
 				attack = 0;
