@@ -10,7 +10,7 @@ import dto.BattleControllDTO;
 import factory.DaoFactory;
 
 //迫りくる後悔
-public class m51 implements ShieldAbility {
+public class m53 implements ShieldAbility {
 
 	@Override
 	public HashMap<String, Object> shieldSkill(String battleID, String playerId) throws Exception {

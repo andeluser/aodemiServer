@@ -95,7 +95,7 @@ public class b11 implements CardAbility {
 				continue;
 			}
 
-			if (dto.getCard_id() != null && !"".equals(dto.getCard_id()) && "黄".equals(dto.getColor())) {
+			if (dto.getCard_id() != null && !"".equals(dto.getCard_id()) && dto.getClose() == 0 && "黄".equals(dto.getColor())) {
 				targetList.add(dto.getField_no());
 			}
 		}
@@ -143,7 +143,7 @@ public class b11 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; i < koList.size(); i++) {
+			for (int j = 0; j < koList.size(); j++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -161,6 +161,7 @@ public class b11 implements CardAbility {
 					}
 
 					fieldDto.setCur_hp(hp);
+					fieldDao.update(fieldDto);
 
 					//戻り値の作成
 					HashMap<String, Object> detailMap = new HashMap<String, Object>();

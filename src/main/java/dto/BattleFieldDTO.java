@@ -37,6 +37,9 @@ public class BattleFieldDTO {
 	private int permanent_range;
 	private int turn_range;
 	private int cur_range;
+	private int permanent_frm;
+	private int turn_frm;
+	private int cur_frm;
 	private int deck_no;
 	private Timestamp update_date;
 	public String getBattle_id() {
@@ -254,6 +257,24 @@ public class BattleFieldDTO {
 	}
 	public void setOpen_close_number(int open_close_number) {
 		this.open_close_number = open_close_number;
+	}
+	public int getPermanent_frm() {
+		return permanent_frm;
+	}
+	public void setPermanent_frm(int permanent_frm) {
+		this.permanent_frm = permanent_frm;
+	}
+	public int getTurn_frm() {
+		return turn_frm;
+	}
+	public void setTurn_frm(int turn_frm) {
+		this.turn_frm = turn_frm;
+	}
+	public int getCur_frm() {
+		return cur_frm;
+	}
+	public void setCur_frm(int cur_frm) {
+		this.cur_frm = cur_frm;
 	}
 
 

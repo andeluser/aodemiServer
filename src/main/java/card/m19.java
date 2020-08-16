@@ -126,7 +126,7 @@ public class m19 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; i < koList.size(); i++) {
+			for (int j = 0; j < koList.size(); j++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -169,6 +169,9 @@ public class m19 implements CardAbility {
 					fieldDto.setPermanent_range(0);
 					fieldDto.setTurn_range(0);
 					fieldDto.setCur_range(0);
+					fieldDto.setPermanent_frm(0);
+					fieldDto.setTurn_frm(0);
+					fieldDto.setCur_frm(0);
 					fieldDto.setDeck_no(0);
 
 					fieldDao.update(fieldDto);

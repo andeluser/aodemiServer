@@ -161,7 +161,7 @@ public class m33 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; i < koList.size(); i++) {
+			for (int j = 0; j < koList.size(); j++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -172,7 +172,7 @@ public class m33 implements CardAbility {
 
 					//自分のATK＋１０を与える
 					int attack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk() + 10;
-					int def = fieldDto.getPermanent_def() + fieldDto.getTurn_def() + fieldDto.getCur_def();
+					int def = enemyFieldDto.getPermanent_def() + enemyFieldDto.getTurn_def() + enemyFieldDto.getCur_def();
 
 					attack = attack - def;
 

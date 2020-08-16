@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import dao.BattleBaseDAO;
 import dao.BattleControllDAO;
 import dao.BattleFieldDAO;
-import dto.BattleBaseDTO;
 import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
@@ -94,7 +92,7 @@ public class b35 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; i < koList.size(); i++) {
+			for (int j = 0; j < koList.size(); j++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -112,7 +110,7 @@ public class b35 implements CardAbility {
 
 					detailMap.put("playerId", player1);
 					detailMap.put("fieldNumber", list.get(k));
-					detailMap.put("tupAGI", 2);
+					detailMap.put("tupAGI", fieldDto.getTurn_speed());
 					retList.add(detailMap);
 				}
 			}
@@ -136,14 +134,7 @@ public class b35 implements CardAbility {
 		DaoFactory factory = new DaoFactory();
 		BattleFieldDAO fieldDao = factory.createFieldDAO();
 		BattleControllDAO controllDao = factory.createControllDAO();
-		BattleBaseDAO baseDao = factory.createBaseDAO();
-
 		BattleControllDTO controllDto = controllDao.getAllValue(battleID);
-		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
-
-		//ＳＰを１減らす
-		baseDto.setSp(baseDto.getSp() - 1);
-		baseDao.update(baseDto);
 
 		//自分の情報を取得
 		BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, playerId, fieldNumber);

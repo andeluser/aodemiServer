@@ -67,6 +67,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		ret.setPermanent_range(rs.getInt("PERMANENT_RANGE"));
 	    		ret.setTurn_range(rs.getInt("TURN_RANGE"));
 	    		ret.setCur_range(rs.getInt("CUR_RANGE"));
+	    		ret.setPermanent_frm(rs.getInt("PERMANENT_FRM"));
+	    		ret.setTurn_frm(rs.getInt("TURN_FRM"));
+	    		ret.setCur_frm(rs.getInt("CUR_FRM"));
 	    		ret.setDeck_no(rs.getInt("DECK_NO"));
 	    		ret.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 	    	}
@@ -145,6 +148,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		dto.setPermanent_range(rs.getInt("PERMANENT_RANGE"));
 	    		dto.setTurn_range(rs.getInt("TURN_RANGE"));
 	    		dto.setCur_range(rs.getInt("CUR_RANGE"));
+	    		dto.setPermanent_frm(rs.getInt("PERMANENT_FRM"));
+	    		dto.setTurn_frm(rs.getInt("TURN_FRM"));
+	    		dto.setCur_frm(rs.getInt("CUR_FRM"));
 	    		dto.setDeck_no(rs.getInt("DECK_NO"));
 	    		dto.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 
@@ -216,6 +222,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 					+ ", '" + dto.getPermanent_range() + "'"
 					+ ", '" + dto.getTurn_range() + "'"
 					+ ", '" + dto.getCur_range() + "'"
+					+ ", '" + dto.getPermanent_frm() + "'"
+					+ ", '" + dto.getTurn_frm() + "'"
+					+ ", '" + dto.getCur_frm() + "'"
 					+ ", '" + dto.getDeck_no() + "'"
 					+ ", CURRENT_TIMESTAMP)";
 
@@ -312,6 +321,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 					+ ", PERMANENT_RANGE = '" + dto.getPermanent_range() + "'"
 					+ ", TURN_RANGE = '" + dto.getTurn_range() + "'"
 					+ ", CUR_RANGE = '" + dto.getCur_range() + "'"
+					+ ", PERMANENT_FRM = '" + dto.getPermanent_frm() + "'"
+					+ ", TURN_FRM = '" + dto.getTurn_frm() + "'"
+					+ ", CUR_FRM = '" + dto.getCur_frm() + "'"
 					+ ", DECK_NO = '" + dto.getDeck_no() + "'"
 					+ ", UPDATE_DATE = CURRENT_TIMESTAMP"
 					+ " WHERE BATTLE_ID = '" + dto.getBattle_id() + "' AND PLAYER_ID = '" + dto.getPlayer_id()+ "' AND FIELD_NO ='" + dto.getField_no() + "'";
@@ -382,6 +394,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
     					+ ", PERMANENT_RANGE = '" + dto.getPermanent_range() + "'"
     					+ ", TURN_RANGE = '" + dto.getTurn_range() + "'"
     					+ ", CUR_RANGE = '" + dto.getCur_range() + "'"
+						+ ", PERMANENT_FRM = '" + dto.getPermanent_frm() + "'"
+    					+ ", TURN_FRM = '" + dto.getTurn_frm() + "'"
+    					+ ", CUR_FRM = '" + dto.getCur_frm() + "'"
     					+ ", DECK_NO = '" + dto.getDeck_no() + "'"
     					+ ", UPDATE_DATE = CURRENT_TIMESTAMP"
     					+ " WHERE BATTLE_ID = '" + dto.getBattle_id() + "' AND PLAYER_ID = '" + dto.getPlayer_id()+ "' AND FIELD_NO ='" + dto.getField_no() + "'";
@@ -468,6 +483,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		dto.setPermanent_range(rs.getInt("PERMANENT_RANGE"));
 	    		dto.setTurn_range(rs.getInt("TURN_RANGE"));
 	    		dto.setCur_range(rs.getInt("CUR_RANGE"));
+	    		dto.setPermanent_frm(rs.getInt("PERMANENT_FRM"));
+	    		dto.setTurn_frm(rs.getInt("TURN_FRM"));
+	    		dto.setCur_frm(rs.getInt("CUR_FRM"));
 	    		dto.setDeck_no(rs.getInt("DECK_NO"));
 	    		dto.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 
@@ -642,6 +660,9 @@ public class BattleFieldDAOImpl implements BattleFieldDAO {
 	    		dto.setPermanent_range(rs.getInt("PERMANENT_RANGE"));
 	    		dto.setTurn_range(rs.getInt("TURN_RANGE"));
 	    		dto.setCur_range(rs.getInt("CUR_RANGE"));
+	    		dto.setPermanent_frm(rs.getInt("PERMANENT_FRM"));
+	    		dto.setTurn_frm(rs.getInt("TURN_FRM"));
+	    		dto.setCur_frm(rs.getInt("CUR_FRM"));
 	    		dto.setDeck_no(rs.getInt("DECK_NO"));
 	    		dto.setUpdate_date(rs.getTimestamp("UPDATE_DATE"));
 

@@ -110,6 +110,9 @@ public class m49 implements ShieldAbility {
 		fieldDto.setPermanent_range(0);
 		fieldDto.setTurn_range(0);
 		fieldDto.setCur_range(0);
+		fieldDto.setPermanent_frm(0);
+		fieldDto.setTurn_frm(0);
+		fieldDto.setCur_frm(0);
 		fieldDto.setDeck_no(0);
 
 		fieldDao.update(fieldDto);

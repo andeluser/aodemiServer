@@ -9,7 +9,7 @@ public class Card {
 	private String type1;
 	private String type2;
 	private String level;
-	private String stock;
+	private String frm;
 	private String hp;
 	private String atk;
 	private String def;
@@ -72,11 +72,11 @@ public class Card {
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	public String getStock() {
-		return stock;
+	public String getFrm() {
+		return frm;
 	}
-	public void setStock(String stock) {
-		this.stock = stock;
+	public void setFrm(String frm) {
+		this.frm = frm;
 	}
 	public String getHp() {
 		return hp;

@@ -41,7 +41,7 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 	    		ret.setCard_type1(rs.getString("CARD_TYPE1"));
 	    		ret.setCard_type2(rs.getString("CARD_TYPE2"));
 	    		ret.setLevel(rs.getInt("LEVEL"));
-	    		ret.setStock(rs.getInt("STOCK"));
+	    		ret.setFrm(rs.getInt("FRM"));
 	    		ret.setHp(rs.getInt("HP"));
 	    		ret.setAtk(rs.getInt("ATK"));
 	    		ret.setDef(rs.getInt("DEF"));
@@ -105,7 +105,7 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 	    		dto.setCard_type(rs.getString("CARD_TYPE"));
 	    		dto.setCard_type1(rs.getString("CARD_TYPE1"));
 	    		dto.setCard_type2(rs.getString("CARD_TYPE2"));
-	    		dto.setStock(rs.getInt("STOCK"));
+	    		dto.setFrm(rs.getInt("FRM"));
 	    		dto.setLevel(rs.getInt("LEVEL"));
 	    		dto.setHp(rs.getInt("HP"));
 	    		dto.setAtk(rs.getInt("ATK"));
@@ -164,7 +164,7 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 					+ ", '" + dto.getCard_type1() + "'"
 					+ ", '" + dto.getCard_type2() + "'"
 					+ ", '" + dto.getLevel() + "'"
-					+ ", '" + dto.getStock() + "'"
+					+ ", '" + dto.getFrm() + "'"
 					+ ", '" + dto.getHp() + "'"
 					+ ", '" + dto.getAtk() + "'"
 					+ ", '" + dto.getDef() + "'"
@@ -246,7 +246,7 @@ public class BattleDeckDAOImpl implements BattleDeckDAO {
 					+ ", CARD_TYPE1 = '" + dto.getCard_type1() + "'"
 					+ ", CARD_TYPE2 = '" + dto.getCard_type2() + "'"
 					+ ", LEVEL = '" + dto.getLevel() + "'"
-					+ ", STOCK = '" + dto.getStock() + "'"
+					+ ", FRM = '" + dto.getFrm() + "'"
 					+ ", HP = '" + dto.getHp() + "'"
 					+ ", ATK = '" + dto.getAtk() + "'"
 					+ ", DEF = '" + dto.getDef() + "'"

@@ -24,11 +24,6 @@ public class b6 implements CardAbility {
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		if (baseDto.getSpecial_stock() < 2) {
-			//ストック２以下なら終了
-			return new HashMap<String, Object>();
-		}
-
 		ArrayList<BattleFieldDTO> fieldDtoList = fieldDao.getAllList(battleID, playerId);
 
 		//対象を計算する
@@ -36,8 +31,10 @@ public class b6 implements CardAbility {
 
 		for (int i = 0; i < fieldDtoList.size(); i++) {
 			BattleFieldDTO list = fieldDtoList.get(i);
-			//死亡かつレベル４以下
-			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 1 && list.getCur_level() <= 4) {
+			//死亡かつレベル４以下、FRM２以上
+			int level =list.getPermanent_level() + list.getTurn_level() + list.getCur_level();
+			int frm = list.getPermanent_frm() + list.getTurn_frm() + list.getCur_frm();
+			if (list.getCard_id() != null && !"".equals(list.getCard_id()) && list.getClose() == 1 && level <= 4 && frm >= 2) {
 				targetList.add(fieldDtoList.get(i).getField_no());
 			}
 		}
@@ -90,7 +87,7 @@ public class b6 implements CardAbility {
 			HashMap<String, Object> oyaMap = (HashMap<String, Object>)targetList.get(i);
 			ArrayList<Object> koList = (ArrayList<Object>)oyaMap.get("targetList");
 
-			for (int j = 0; i < koList.size(); i++) {
+			for (int j = 0; j < koList.size(); j++) {
 				HashMap<String, Object> koMap = (HashMap<String, Object>)koList.get(j);
 
 				String player1 = koMap.get("playerId").toString();
@@ -126,6 +123,8 @@ public class b6 implements CardAbility {
 					fieldDto.setTurn_speed(0);
 					fieldDto.setPermanent_range(0);
 					fieldDto.setTurn_range(0);
+					fieldDto.setPermanent_frm(0);
+					fieldDto.setTurn_frm(0);
 
 					fieldDao.update(fieldDto);
 

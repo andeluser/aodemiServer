@@ -58,6 +58,8 @@ public class b90 implements ShieldAbility {
 				dto.setTurn_speed(0);
 				dto.setPermanent_range(0);
 				dto.setTurn_range(0);
+				dto.setPermanent_frm(0);
+				dto.setTurn_frm(0);
 
 				fieldDao.update(dto);
 

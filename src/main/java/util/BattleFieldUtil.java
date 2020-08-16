@@ -121,6 +121,9 @@ public class BattleFieldUtil {
 			dto.setPermanent_range(0);
 			dto.setTurn_range(0);
 			dto.setCur_range(0);
+			dto.setPermanent_frm(0);
+			dto.setTurn_frm(0);
+			dto.setCur_frm(0);
 			dto.setDeck_no(0);
 
 			dao.insert(dto);
@@ -182,7 +185,7 @@ public class BattleFieldUtil {
 			dto.setCard_type1(card.getType1());
 			dto.setCard_type2(card.getType2());
 			dto.setLevel(util.getIntForString(card.getLevel()));
-			dto.setStock(util.getIntForString(card.getStock()));
+			dto.setFrm(util.getIntForString(card.getFrm()));
 			dto.setHp(util.getIntForString(card.getHp()));
 			dto.setAtk(util.getIntForString(card.getAtk()));
 			dto.setDef(util.getIntForString(card.getDef()));
@@ -546,6 +549,9 @@ public class BattleFieldUtil {
 		fieldDto.setPermanent_range(0);
 		fieldDto.setTurn_range(0);
 		fieldDto.setCur_range(0);
+		fieldDto.setPermanent_frm(0);
+		fieldDto.setTurn_frm(0);
+		fieldDto.setCur_frm(0);
 		fieldDto.setDeck_no(0);
 
 		fieldDao.update(fieldDto);
@@ -687,6 +693,9 @@ public class BattleFieldUtil {
 			fieldDto.setPermanent_range(0);
 			fieldDto.setTurn_range(0);
 			fieldDto.setCur_range(0);
+			fieldDto.setPermanent_frm(0);
+			fieldDto.setTurn_frm(0);
+			fieldDto.setCur_frm(0);
 			fieldDto.setDeck_no(0);
 
 			//シールド処理を呼び出す（99の場合は左から順にシールドを減らす）
@@ -753,6 +762,8 @@ public class BattleFieldUtil {
 					fieldDto.setTurn_speed(0);
 					fieldDto.setPermanent_range(0);
 					fieldDto.setTurn_range(0);
+					fieldDto.setPermanent_frm(0);
+					fieldDto.setTurn_frm(0);
 
 					fieldDao.update(fieldDto);
 
@@ -919,6 +930,9 @@ public class BattleFieldUtil {
 		dto.setPermanent_range(0);
 		dto.setTurn_range(0);
 		dto.setCur_range(stringUtil.getIntForString(cardInfo.getRng()));
+		dto.setPermanent_frm(0);
+		dto.setTurn_frm(0);
+		dto.setCur_frm(stringUtil.getIntForString(cardInfo.getFrm()));
 		dto.setDeck_no(deckNumber);
 
 		dao.update(dto);
@@ -1088,6 +1102,7 @@ public class BattleFieldUtil {
 				dto.setTurn_level(0);
 				dto.setTurn_range(0);
 				dto.setTurn_speed(0);
+				dto.setTurn_frm(0);
 
 				list.add(dto);
 			}

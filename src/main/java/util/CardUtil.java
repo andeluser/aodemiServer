@@ -69,7 +69,7 @@ public class CardUtil {
 					ret.setType1(getStringCellValue(row.getCell(this.cardColumIndex.get("type1"))));
 					ret.setType2(getStringCellValue(row.getCell(this.cardColumIndex.get("type2"))));
 					ret.setLevel(getStringCellValue(row.getCell(this.cardColumIndex.get("level"))));
-					ret.setStock(getStringCellValue(row.getCell(this.cardColumIndex.get("stock"))));
+					ret.setFrm(getStringCellValue(row.getCell(this.cardColumIndex.get("frm"))));
 					ret.setHp(getStringCellValue(row.getCell(this.cardColumIndex.get("hp"))));
 					ret.setAtk(getStringCellValue(row.getCell(this.cardColumIndex.get("atk"))));
 					ret.setDfe(getStringCellValue(row.getCell(this.cardColumIndex.get("dfe"))));

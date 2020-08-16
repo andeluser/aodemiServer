@@ -14,7 +14,7 @@ public class BattleDeckDTO {
 	private String card_type1;
 	private String card_type2;
 	private int level;
-	private int stock;
+	private int frm;
 	private int hp;
 	private int atk;
 	private int def;
@@ -86,11 +86,11 @@ public class BattleDeckDTO {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	public int getStock() {
-		return stock;
+	public int getFrm() {
+		return frm;
 	}
-	public void setStock(int stock) {
-		this.stock = stock;
+	public void setFrm(int frm) {
+		this.frm = frm;
 	}
 	public int getHp() {
 		return hp;

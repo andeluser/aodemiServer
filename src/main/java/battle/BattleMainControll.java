@@ -1068,23 +1068,6 @@ public class BattleMainControll {
     			target = (ArrayList<Object>) shieldMap.get("target");
     		}
 
-    		//開始前に覚醒ゲージを１０増やす
-    		BattleBaseDAO baseDao = factory.createBaseDAO();
-    		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, shieldMap.get("playerId").toString());
-    		int gage = baseDto.getSpecial_gage() + 10;
-
-    		if (gage >= 20) {
-    			gage = gage - 20;
-    			baseDto.setSpecial_stock(baseDto.getSpecial_stock() + 1);
-
-    			if (baseDto.getSpecial_stock() > 5) {
-    				baseDto.setSpecial_stock(5);
-    			}
-    		}
-
-    		baseDto.setSpecial_gage(gage);
-    		baseDao.update(baseDto);
-
     		//対象選択の有無で処理を切り分ける
     		if (target.size() != 0) {
     			//次の行動が自分
@@ -1130,6 +1113,24 @@ public class BattleMainControll {
             	outMap.put("targetList", new HashMap<String, Object>());
             	outMap.put("updateInfo", new HashMap<String, Object>());
     		} else {
+
+        		//開始前に覚醒ゲージを１０増やす
+        		BattleBaseDAO baseDao = factory.createBaseDAO();
+        		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, shieldMap.get("playerId").toString());
+        		int gage = baseDto.getSpecial_gage() + 10;
+
+        		if (gage >= 20) {
+        			gage = gage - 20;
+        			baseDto.setSpecial_stock(baseDto.getSpecial_stock() + 1);
+
+        			if (baseDto.getSpecial_stock() > 5) {
+        				baseDto.setSpecial_stock(5);
+        			}
+        		}
+
+        		baseDto.setSpecial_gage(gage);
+        		baseDao.update(baseDto);
+
     			//リムーブ対象が存在する場合は戻り値を設定する
     			outMap.put("playerId", shieldMap.get("playerId"));
     			outMap.put("fieldNumber", shieldMap.get("fieldNumber"));

@@ -12,6 +12,7 @@ import dto.BattleBaseDTO;
 import dto.BattleControllDTO;
 import dto.BattleFieldDTO;
 import factory.DaoFactory;
+import util.CommonUtil;
 
 //煉獄の炎
 public class m38 implements CardAbility {
@@ -34,15 +35,16 @@ public class m38 implements CardAbility {
 			enemyPlayerId = controllDTO.getPlayer_id_1();
 		}
 
-		//相手の対象計算
-		ArrayList<BattleFieldDTO> enemyFieldDtoList = fieldDao.getAllList(battleID, enemyPlayerId);
 
-		//対象を計算する
-		ArrayList<Object> enemyTargetList = new ArrayList<Object>();
 
 		ArrayList<Object> updateList = new ArrayList<Object>();
 
 		for (int index = 0; index < 3; index++) {
+
+			//相手の対象計算
+			ArrayList<BattleFieldDTO> enemyFieldDtoList = fieldDao.getAllList(battleID, enemyPlayerId);
+			//対象を計算する
+			ArrayList<Object> enemyTargetList = new ArrayList<Object>();
 
 			for (int i = 0; i < enemyFieldDtoList.size(); i++) {
 				BattleFieldDTO list = enemyFieldDtoList.get(i);
@@ -109,34 +111,30 @@ public class m38 implements CardAbility {
 		BattleBaseDAO baseDao = factory.createBaseDAO();
 		BattleBaseDTO enemyBaseDto = baseDao.getAllValue(battleID, enemyPlayerId);
 
-		int enemyStock = enemyBaseDto.getSpecial_stock() + 1;
+		CommonUtil util = new CommonUtil();
 
-		if (enemyStock > 5) {
-			enemyStock = 5;
-		}
-
-		enemyBaseDto.setSpecial_stock(enemyStock);
+		HashMap<String, Object> map = util.addSpecial(enemyBaseDto.getSpecial_gage(), enemyBaseDto.getSpecial_stock(), 0, 1);
+		enemyBaseDto.setSpecial_gage((int)map.get("gage"));
+		enemyBaseDto.setSpecial_stock((int)map.get("stock"));
 		baseDao.update(enemyBaseDto);
 
 		specialDetailMap.put("playerId", enemyPlayerId);
-		specialDetailMap.put("stock", enemyStock);
+		specialDetailMap.put("gage", enemyBaseDto.getSpecial_gage());
+		specialDetailMap.put("stock", enemyBaseDto.getSpecial_stock());
 		specialList.add(specialDetailMap);
 
 		//自分の奥義ストックを２減らす
 		HashMap<String, Object> specialDetailMap2 = new HashMap<String, Object>();
 		BattleBaseDTO baseDto = baseDao.getAllValue(battleID, playerId);
 
-		int stock = baseDto.getSpecial_stock() - 2;
-
-		if (stock < 0) {
-			stock = 0;
-		}
-
-		baseDto.setSpecial_stock(stock);
+		HashMap<String, Object> map2 = util.addSpecial(baseDto.getSpecial_gage(), baseDto.getSpecial_stock(), 0, -2);
+		baseDto.setSpecial_gage((int)map2.get("gage"));
+		baseDto.setSpecial_stock((int)map2.get("stock"));
 		baseDao.update(baseDto);
 
 		specialDetailMap2.put("playerId", playerId);
-		specialDetailMap2.put("stock", stock);
+		specialDetailMap2.put("gage", baseDto.getSpecial_gage());
+		specialDetailMap2.put("stock", baseDto.getSpecial_stock());
 		specialList.add(specialDetailMap2);
 
 		//戻り値設定
