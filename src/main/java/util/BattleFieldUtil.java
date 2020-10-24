@@ -330,17 +330,12 @@ public class BattleFieldUtil {
 		BattleFieldDTO fieldDto = fieldDao.getAllValue(battleID, playerId, fieldNumber);
 
 		//射程から相手の候補を計算する
-		targetList = getRangeTargetList(controllDto, playerId, fieldNumber);
+		BattleFieldUtil battleUtil = new BattleFieldUtil();
+		targetList = battleUtil.getRangeTargetList(controllDto, playerId, fieldNumber);
+
+		ExpansionUtil expansion = new ExpansionUtil();
 
 		if (targetList.size() != 0) {
-
-			//候補から対象を決める
-			Random rand = new Random();
-			int num = rand.nextInt(targetList.size());
-			int target = (int)targetList.get(num);
-
-			//攻撃力を取得
-			int atack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
 
 			//攻撃対象のHPを減らす
 			String enemyPlayer = "";
@@ -350,66 +345,120 @@ public class BattleFieldUtil {
 				enemyPlayer = controllDto.getPlayer_id_1();
 			}
 
-			BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, enemyPlayer, target);
-
-			//HP
-			int enemyHp = enemyFieldDto.getCur_hp();
-			//DEF
-			int enemyDef = enemyFieldDto.getPermanent_def() + enemyFieldDto.getTurn_def() + enemyFieldDto.getCur_def();
-
-			//ダメージを算出
-			int damage = atack - enemyDef;
-
-			if (damage < 0) {
-				damage = 0;
-			}
-
-			//HPを計算
-			enemyHp = enemyHp - damage;
-
-			//相手のHPを設定
-			enemyFieldDto.setCur_hp(enemyHp);
-
 			ArrayList<HashMap<String, Object>> updateList = new ArrayList<HashMap<String, Object>>();
 
-			//相手のHPがゼロ以下となった場合はクローズ判定を立てる
-			if (enemyHp <= 0) {
+			//暴風雨を持っている場合
+			if (expansion.returnCheack(fieldDto.getCard_id(), "attackStorm")) {
 
-				ExpansionUtil expansion = new ExpansionUtil();
+				int closeNumber = fieldDao.getCloseNumber(battleID) + 1;
 
-				//太古の力を持っている場合はHPを２０回復
-				if (expansion.returnCheack(fieldDto.getCard_id(), "AncientPower")) {
-					int maxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
-					int hp = fieldDto.getCur_hp() + 20;
+				for (int i = 0; i < targetList.size(); i++) {
+					//攻撃対象のHPを減らす
+					BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, enemyPlayer, (int)targetList.get(i));
 
-					if (hp > maxHp) {
-						hp = maxHp;
+					int def = enemyFieldDto.getTurn_def() + enemyFieldDto.getPermanent_def() + enemyFieldDto.getCur_def();
+					int attack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
+
+					attack = attack - def;
+
+					if (attack < 0) {
+						attack = 0;
 					}
 
-					fieldDto.setCur_hp(hp);
+					int enemyHp = enemyFieldDto.getCur_hp() - attack;
 
+					//相手のHPを設定
+					enemyFieldDto.setCur_hp(enemyHp);
+
+					//相手のHPがゼロ以下となった場合はクローズ判定を立てる。複数クローズする可能性あり
+					if (enemyHp <= 0) {
+						enemyFieldDto.setClose(1);
+						enemyFieldDto.setClose_number(closeNumber);
+					}
+
+					//相手のRNGを-1する
+					enemyFieldDto.setPermanent_range(enemyFieldDto.getPermanent_range() - 1);
+
+					fieldDao.update(enemyFieldDto);
+
+					//戻り値を設定
 					HashMap<String, Object> updateMap = new HashMap<String, Object>();
 
-					updateMap.put("fieldNumber", fieldNumber);
-					updateMap.put("hp", hp);
-					updateMap.put("playerId", playerId);
+					updateMap.put("fieldNumber", enemyFieldDto.getField_no());
+					updateMap.put("hp", enemyHp);
+					updateMap.put("upRNG", enemyFieldDto.getPermanent_range());
+					updateMap.put("playerId", enemyPlayer);
+
 					updateList.add(updateMap);
 				}
 
-				fieldDao.setClose(battleID, enemyFieldDto.getPlayer_id(), enemyFieldDto.getField_no(), enemyFieldDto);
+			} else {
+				//候補から対象を決める
+				Random rand = new Random();
+				int num = rand.nextInt(targetList.size());
+				int target = (int)targetList.get(num);
+
+				//攻撃力を取得
+				int atack = fieldDto.getPermanent_atk() + fieldDto.getTurn_atk() + fieldDto.getCur_atk();
+
+				BattleFieldDTO enemyFieldDto = fieldDao.getAllValue(battleID, enemyPlayer, target);
+
+				//HP
+				int enemyHp = enemyFieldDto.getCur_hp();
+				//DEF
+				int enemyDef = enemyFieldDto.getPermanent_def() + enemyFieldDto.getTurn_def() + enemyFieldDto.getCur_def();
+
+				//ダメージを算出
+				int damage = atack - enemyDef;
+
+				if (damage < 0) {
+					damage = 0;
+				}
+
+				//HPを計算
+				enemyHp = enemyHp - damage;
+
+				//相手のHPを設定
+				enemyFieldDto.setCur_hp(enemyHp);
+
+				//相手のHPがゼロ以下となった場合はクローズ判定を立てる
+				if (enemyHp <= 0) {
+
+					//太古の力を持っている場合はHPを２０回復
+					if (expansion.returnCheack(fieldDto.getCard_id(), "AncientPower")) {
+						int maxHp = fieldDto.getPermanent_hp() + fieldDto.getTurn_hp() + fieldDto.getBase_hp();
+						int hp = fieldDto.getCur_hp() + 20;
+
+						if (hp > maxHp) {
+							hp = maxHp;
+						}
+
+						fieldDto.setCur_hp(hp);
+
+						HashMap<String, Object> updateMap = new HashMap<String, Object>();
+
+						updateMap.put("fieldNumber", fieldNumber);
+						updateMap.put("hp", hp);
+						updateMap.put("playerId", playerId);
+						updateList.add(updateMap);
+					}
+
+					fieldDao.setClose(battleID, enemyFieldDto.getPlayer_id(), enemyFieldDto.getField_no(), enemyFieldDto);
+				}
+
+				//両方の状態を更新する。
+				fieldDao.update(fieldDto);
+				fieldDao.update(enemyFieldDto);
+
+				//戻り値を設定
+				HashMap<String, Object> updateMap = new HashMap<String, Object>();
+
+				updateMap.put("fieldNumber", target);
+				updateMap.put("hp", enemyHp);
+				updateMap.put("playerId", enemyPlayer);
+				updateList.add(updateMap);
+
 			}
-
-			//両方の状態を更新する。
-			fieldDao.update(fieldDto);
-			fieldDao.update(enemyFieldDto);
-
-			//戻り値を設定
-			HashMap<String, Object> updateMap = new HashMap<String, Object>();
-
-			updateMap.put("fieldNumber", target);
-			updateMap.put("hp", enemyHp);
-			updateMap.put("playerId", enemyPlayer);
-			updateList.add(updateMap);
 
 			HashMap<String, Object> orderMap = new HashMap<String, Object>();
 			ArrayList<Object> orderList = new ArrayList<Object>();

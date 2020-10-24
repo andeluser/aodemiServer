@@ -33,6 +33,11 @@ public class CommonUtil {
 				stock = stock - 1;
 			}
 
+			if (gage == 20) {
+				gage = 0;
+				stock  = stock + 1;
+			}
+
 			if (stock < 0) {
 				gage = 0;
 				stock = 0;

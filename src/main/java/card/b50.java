@@ -86,9 +86,9 @@ public class b50 implements CardAbility {
 		//存在している魔法カードをリストへ
 		for (int i = 0; i < deckDtoList.size(); i++) {
 			BattleDeckDTO deckDto = deckDtoList.get(i);
-//			if (deckDto.getCard_out() == 0 && deckDto.getCard_type() == "魔法") {
+			if (deckDto.getCard_out() == 0 && deckDto.getCard_lock() == 0 && "魔法".equals(deckDto.getCard_type())) {
 				deckList.add(deckDto.getDeck_no());
-//			}
+			}
 		}
 
 		//対象がない場合は処理終了
@@ -102,7 +102,7 @@ public class b50 implements CardAbility {
 
 		//ロックする ！ターン数要確認
 		BattleDeckDTO deckDto = deckDtoList.get(selectDeck_no);
-		deckDto.setCard_lock(1);
+		deckDto.setCard_lock(30);
 		deckDao.update(deckDto);
 
 		//戻り値
@@ -112,7 +112,7 @@ public class b50 implements CardAbility {
 
 		detailMap.put("playerId", enemyPlayerId);
 		detailMap.put("deckNumber", selectDeck_no);
-		detailMap.put("lockTurn", 1);
+		detailMap.put("lockTurn", 30);
 		retList.add(detailMap);
 
 		updateMap.put("deckLock", retList);
